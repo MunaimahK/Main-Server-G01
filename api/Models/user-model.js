@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const User = mongoose.Schema(
   {
+    /*
     name: String,
     username: String,
     email: String,
@@ -8,10 +9,10 @@ const User = mongoose.Schema(
     gender: String,
     paidDues: Boolean,
     isAdmin: Boolean,
-    custom: String,
+    custom: String,*/
   },
   {
-    collection: "main",
+    collection: "users",
   }
 );
 

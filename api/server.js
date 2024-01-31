@@ -68,8 +68,49 @@ app.get("/api/auth/discord/dashboard", async (req, res) => {
           console.log(data);
         }
       });*/
-      const db = mongoose.connect("mongodb://localhost:27017/Influx-main");
+      var db = mongoose.connect(
+        "mongodb://localhost:27017/Influx-main"
+      ); /*
+      const found = await oauthModel.isThisDiscordIdPresent(
+        userResponse.username
+      );
+
+      console.log("Found\n\n", found);*/
+      //var collection = db.collection("main");
       // add the authorized user to the main server db
+      /*
+      const found = oauthModel.findOne({
+        discordId: userResponse.id,
+        username: userResponse.username,
+        avatar: userResponse.avatar,
+        clubs: "null",
+      });
+*/ const user = await oauthModel.findOne(
+        { username: userResponse.username }
+      );
+
+      console.log("USER:", user);
+      var count = 0;
+      if (user) {
+        count = 1;
+      }
+
+      var data = new oauthModel({
+        discordId: userResponse.id,
+        username: userResponse.username,
+        avatar: userResponse.avatar,
+        clubs: null,
+      });
+      if (count == 0) {
+        await data.save();
+      }
+
+      /*
+      if (!collection.find(data)) {
+        data.save();
+      }
+*/
+      /*
       var data = new oauthModel({
         discordId: userResponse.id,
         username: userResponse.username,
@@ -77,9 +118,10 @@ app.get("/api/auth/discord/dashboard", async (req, res) => {
         clubs: null,
       });
 
-      data.save();
-
-      res.redirect(301, "http://localhost:3000/dashboard");
+*/ res.redirect(
+        301,
+        "http://localhost:3000/dashboard"
+      );
 
       /*
       const checkIfUserExists = await db("main")
