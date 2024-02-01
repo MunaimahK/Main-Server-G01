@@ -1,6 +1,15 @@
 import "./Cards.css";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Cards = (props) => {
+  const navigate = useNavigate();
+  const joinClub = async (e) => {
+    e.preventDefault();
+    navigate(`/${props.redirect}`);
+  };
+
   return (
     <div className="card">
       <a href={props.link} className="link-to-controller">
@@ -8,6 +17,9 @@ const Cards = (props) => {
         <h2 className="card-title">{props.title}</h2>
         <p className="card-text">{props.text}</p>
       </a>
+      <button className="btn" type="submit" onClick={joinClub}>
+        {props.title}
+      </button>
     </div>
   );
 };

@@ -35,3 +35,14 @@
 a.link-to-controller {
   text-decoration: none;
 }
+
+.btn {
+  border-color: hsl(0, 0%, 40%);
+  width: 200px;
+  border-radius: 10px;
+  opacity: 50%;
+}
+
+.btn:hover {
+  opacity: 60%;
+}

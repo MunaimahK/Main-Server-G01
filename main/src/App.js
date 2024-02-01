@@ -31,18 +31,21 @@ function App() {
                   img={placeholderLogo}
                   title="Controller1"
                   text="Description about C1@UCF"
+                  redirect="controller1"
                 />
                 <Cards
                   link="https://knightconnect.campuslabs.com/engage/organization/acducf"
                   img={placeholderLogo}
                   title="Controller2"
                   text="Description about C2@UCF"
+                  redirect="controller2"
                 />
                 <Cards
                   link="https://knightconnect.campuslabs.com/engage/organization/aiaa"
                   img={placeholderLogo}
                   title="Controller3"
                   text="Description about C3@UCF"
+                  redirect="controller3"
                 />
               </div>
             </>
