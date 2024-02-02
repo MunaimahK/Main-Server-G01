@@ -1,6 +1,15 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap");
 body {
   background-color: aliceblue;
 }
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
 nav {
   display: flex;
   align-items: center;
@@ -27,12 +36,10 @@ nav {
   font-size: 1.3rem;
   font-weight: 600;
   color: aliceblue;
-  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
 }
 
 .nav-bar li a:hover {
   color: rgb(221, 192, 6);
-  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
 }
 
 .nav-bar li a:hover::after {

@@ -11,6 +11,8 @@ import AdminSignUp from "./Components/AdminSignUp.js";
 import AdminLogin from "./Components/AdminLogin.js";
 import About from "./Components/About.js";
 
+// Knight Hacks img 1 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIHZlnuvnNWPsSs-9iltSdMx3fEjByztOWDgsNdVLPlDZjTUMyuRwRonlvENldynzVEzA&usqp=CAU"
+// Knight Hacks img 2 = https://avatars.githubusercontent.com/u/11686531?s=200&v=4
 function App() {
   return (
     <Router>
@@ -28,24 +30,21 @@ function App() {
               <div className="card-container">
                 <Cards
                   link="https://knightconnect.campuslabs.com/engage/organization/4everknights"
-                  img={placeholderLogo}
-                  title="Controller1"
-                  text="Description about C1@UCF"
-                  redirect="controller1"
+                  img={
+                    "https://avatars.githubusercontent.com/u/11686531?s=200&v=4"
+                  }
+                  title="Knight Hacks"
+                  text="Join the Hackathon!"
+                  redirect="clubs/KnightHacks"
                 />
                 <Cards
                   link="https://knightconnect.campuslabs.com/engage/organization/acducf"
-                  img={placeholderLogo}
-                  title="Controller2"
+                  img={
+                    "https://pbs.twimg.com/profile_images/1318731511785377792/4lXV4K-c_400x400.jpg"
+                  }
+                  title="Hack@UCF"
                   text="Description about C2@UCF"
                   redirect="controller2"
-                />
-                <Cards
-                  link="https://knightconnect.campuslabs.com/engage/organization/aiaa"
-                  img={placeholderLogo}
-                  title="Controller3"
-                  text="Description about C3@UCF"
-                  redirect="controller3"
                 />
               </div>
             </>

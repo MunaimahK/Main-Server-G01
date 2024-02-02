@@ -5,7 +5,8 @@ body#star-theme {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: radial-gradient(ellipse at bottom, rgb(1, 2, 24), rgb(0, 0, 0));
+  /*background: radial-gradient(ellipse at bottom, rgb(1, 2, 24), rgb(0, 0, 0));*/
+  background: radial-gradient(ellipse at bottom, rgb(12, 25, 59), rgb(0, 0, 0));
   overflow: hidden;
 }
 

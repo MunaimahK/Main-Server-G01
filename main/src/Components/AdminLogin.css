@@ -14,11 +14,13 @@
 }
 
 body#log-in {
+  background: radial-gradient(ellipse at bottom, rgb(27, 46, 90), rgb(0, 0, 0));
+  /*
   background-image: url("../BGGradient.png");
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-attachment: fixed;*/
 }
 
 a {
