@@ -29,13 +29,13 @@ function App() {
               <Dashboard />
               <div className="card-container">
                 <Cards
-                  link="https://knightconnect.campuslabs.com/engage/organization/4everknights"
+                  link="http://localhost:3002/"
                   img={
                     "https://avatars.githubusercontent.com/u/11686531?s=200&v=4"
                   }
                   title="Knight Hacks"
                   text="Join the Hackathon!"
-                  redirect="clubs/KnightHacks"
+                  redirect="http://localhost:3002/"
                 />
                 <Cards
                   link="https://knightconnect.campuslabs.com/engage/organization/acducf"
@@ -43,7 +43,7 @@ function App() {
                     "https://pbs.twimg.com/profile_images/1318731511785377792/4lXV4K-c_400x400.jpg"
                   }
                   title="Hack@UCF"
-                  text="Description about C2@UCF"
+                  text="Hi Cybersecurity"
                   redirect="controller2"
                 />
               </div>

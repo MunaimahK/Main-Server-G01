@@ -21,7 +21,7 @@ try {
 
 // -DiscordOauth2 Redirect------------------------------------------------------------------------------------------------
 app.get("/api/auth/discord/dashboard", async (req, res) => {
-  console.log(req.query);
+  // console.log(req.query);
   const { code } = req.query;
   if (code) {
     const formData = new url.URLSearchParams({
@@ -51,11 +51,6 @@ app.get("/api/auth/discord/dashboard", async (req, res) => {
         },
       }
     );
-
-    /*
-    const url = "http://localhost:3000/dashboard";
-    res.redirect(url);*/
-
     if (userResponse) {
       const { id, username, avatar } = userResponse;
       console.log(userResponse.username);
@@ -68,9 +63,8 @@ app.get("/api/auth/discord/dashboard", async (req, res) => {
           console.log(data);
         }
       });*/
-      var db = mongoose.connect(
-        "mongodb://localhost:27017/Influx-main"
-      ); /*
+      
+      /*
       const found = await oauthModel.isThisDiscordIdPresent(
         userResponse.username
       );
@@ -89,7 +83,7 @@ app.get("/api/auth/discord/dashboard", async (req, res) => {
         { username: userResponse.username }
       );
 
-      console.log("USER:", user);
+     // console.log("USER:", user);
       var count = 0;
       if (user) {
         count = 1;
@@ -137,7 +131,7 @@ app.get("/api/auth/discord/dashboard", async (req, res) => {
       }*/
     }
 
-    console.log(userResponse);
+    // console.log(userResponse);
     // res.send(JSON.stringify(userResponse, null, 2));
   }
 });

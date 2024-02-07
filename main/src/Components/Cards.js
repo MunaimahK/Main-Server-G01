@@ -7,7 +7,8 @@ const Cards = (props) => {
   const navigate = useNavigate();
   const joinClub = async (e) => {
     e.preventDefault();
-    navigate(`/${props.redirect}`);
+   // navigate(`/${props.redirect}`);
+   // navigate('http://localhost:3002/mainpage');
   };
 
   return (
