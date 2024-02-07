@@ -23,11 +23,13 @@ const oauthModel = require("./Models/oauth-model.js");
 
 // -Connect to MongoDB Inlfux-main DB-------------------------------------------------------------------------------------
 try {
-  const db = mongoose.connect("mongodb://localhost:27017/Influx-main");
+   mongoose.connect("mongodb://localhost:27017/Influx-main");
+   const db = mongoose.connection
   console.log("Connected");
 } catch (error) {
   handleError(error);
 }
+
 
 // -DiscordOauth2 Redirect------------------------------------------------------------------------------------------------
 app.get("/api/auth/discord/dashboard", async (req, res) => {
