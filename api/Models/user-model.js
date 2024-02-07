@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const User = mongoose.Schema(
   {
+    name: String,
+    major: String,
+    gradDate: String
     /*
     name: String,
     username: String,
@@ -12,7 +15,7 @@ const User = mongoose.Schema(
     custom: String,*/
   },
   {
-    collection: "users",
+    collection: "members",
   }
 );
 

@@ -44,13 +44,17 @@ function App() {
                   }
                   title="Hack@UCF"
                   text="Hi Cybersecurity"
-                  redirect="controller2"
+                  redirect="/controller2"
                 />
               </div>
             </>
           }
         />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path='/KnightHacks' component={() => {
+    window.location.href = 'https://localhost:3002';
+    return null;
+}}/>
       </Routes>
     </Router>
   );

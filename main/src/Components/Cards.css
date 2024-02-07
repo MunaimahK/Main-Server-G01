@@ -66,3 +66,23 @@ a.link-to-controller {
   text-decoration: none;
 }
 
+.pop-up-form{
+  color: black;
+}
+
+#close{
+  border-radius: 1px px 5px 5px;
+  width: 5vh;
+  position: absolute;
+  top: 5%;
+  left: 90%;
+  transform: translate(0%, -80%);
+}
+
+#close:hover{
+  border-radius: 1px px 5px 5px;
+  width: 5vh;
+  position: absolute;
+  background: rgb(0, 9, 32);
+  color: white
+}

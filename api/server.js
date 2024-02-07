@@ -1,14 +1,24 @@
 require("dotenv").config();
-const userrouter = require("./Routers/router1");
-const oauth = require("./Routers/discord");
+const userrouter = require("./Controllers/router1.js");
+const oauth = require("./Controllers/discord.js");
 const express = require("express");
 const mongoose = require("mongoose");
 const axios = require("axios");
 const url = require("url");
+const cors = require("cors")
 const { error } = require("console");
 // const port = process.env.PORT || 3001;
 const router = express.Router();
+
+// middleware
 const app = express();
+app.use(express.json());
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
+app.use("/", require("./Routes/routes"));
+
 const oauthModel = require("./Models/oauth-model.js");
 
 // -Connect to MongoDB Inlfux-main DB-------------------------------------------------------------------------------------
@@ -54,36 +64,11 @@ app.get("/api/auth/discord/dashboard", async (req, res) => {
     if (userResponse) {
       const { id, username, avatar } = userResponse;
       console.log(userResponse.username);
-
-      /*
-      oauthModel.find({ discordId: userResponse.id }, (error, data) => {
-        if (error) {
-          console.log(error);
-        } else {
-          console.log(data);
-        }
-      });*/
       
-      /*
-      const found = await oauthModel.isThisDiscordIdPresent(
-        userResponse.username
-      );
-
-      console.log("Found\n\n", found);*/
-      //var collection = db.collection("main");
-      // add the authorized user to the main server db
-      /*
-      const found = oauthModel.findOne({
-        discordId: userResponse.id,
-        username: userResponse.username,
-        avatar: userResponse.avatar,
-        clubs: "null",
-      });
-*/ const user = await oauthModel.findOne(
+ const user = await oauthModel.findOne(
         { username: userResponse.username }
       );
 
-     // console.log("USER:", user);
       var count = 0;
       if (user) {
         count = 1;
@@ -98,99 +83,14 @@ app.get("/api/auth/discord/dashboard", async (req, res) => {
       if (count == 0) {
         await data.save();
       }
-
-      /*
-      if (!collection.find(data)) {
-        data.save();
-      }
-*/
-      /*
-      var data = new oauthModel({
-        discordId: userResponse.id,
-        username: userResponse.username,
-        avatar: userResponse.avatar,
-        clubs: null,
-      });
-
-*/ res.redirect(
+ res.redirect(
         301,
         "http://localhost:3000/dashboard"
       );
-
-      /*
-      const checkIfUserExists = await db("main")
-        .where({ discordId: id })
-        .first();
-
-      if (checkIfUserExists) {
-        await db("main")
-          .where({ discordId: id })
-          .update({ username, avatar });
-      } else {
-        await db("main").insert({ discordId: id, username, avatar });
-      }*/
-    }
-
-    // console.log(userResponse);
-    // res.send(JSON.stringify(userResponse, null, 2));
-  }
-});
-
-app.post("/dashboard", async (req, res) => {
-  const url2 = "http://localhost:3000/dashboard";
-  req.redirect(url2);
-  return;
-});
-
-/*
-app.get("/api/auth/discord/redirect", async (req, res) => {
-  const url =
-    "https://discord.com/api/oauth2/authorize?client_id=1179068530273034290&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2Fapi%2Fauth%2Fdiscord%2Fredirect&scope=identify+email";
-  return res.redirect(url);
-});
-
-app.get("/api/auth/discord/redirect", async (req, res) => {
-  const { code } = req.query;
-
-  if (code) {
-    const formData = new url.URLSearchParams({
-      client_id: process.env.ClientID,
-      client_secret: process.env.ClientSecret,
-      grant_type: "authorization_code",
-      code: code.toString(),
-      redirect_uri: "http://localhost:3001/api/auth/discord/redirect",
-    });
-    console.log("Hello");
-    const output = await axios.post(
-      "https://discord.com/api/v10/oauth2/token",
-      formData,
-      {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      }
-    );
-
-    if (output.data) {
-      const access = output.data.access_token;
-      const userInfo = await axios.get(
-        "https://discord.com/api/v10/oauth2/users/@me",
-        {
-          headers: {
-            Authorization: `Bearer ${access}`,
-          },
-        }
-      );
-
-      console.log(output.data, userInfo.data);
     }
   }
 });
-*/
-//app.use("/user/oauth", oauth);
-//app.use(express.json());
-// -Enable the app to use router with a base route-------------------------------------------------------------------------------------
-//app.use("/user", userrouter);
+
 
 // -Start the server-------------------------------------------------------------------------------------
 app.listen(3001, () => {
