@@ -19,7 +19,7 @@ app.use(cors({
 }));
 app.use("/", require("./Routes/routes"));
 
-const oauthModel = require("./Models/oauth-model.js");
+// const oauthModel = require("./Models/oauth-model.js");
 
 // -Connect to MongoDB Inlfux-main DB-------------------------------------------------------------------------------------
 try {
@@ -30,7 +30,7 @@ try {
   handleError(error);
 }
 
-
+/*
 // -DiscordOauth2 Redirect------------------------------------------------------------------------------------------------
 app.get("/api/auth/discord/dashboard", async (req, res) => {
   // console.log(req.query);
@@ -91,7 +91,7 @@ app.get("/api/auth/discord/dashboard", async (req, res) => {
       );
     }
   }
-});
+});*/
 
 
 // -Start the server-------------------------------------------------------------------------------------

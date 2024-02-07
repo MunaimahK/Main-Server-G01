@@ -3,7 +3,8 @@ const router = express.Router();
 const cors = require("cors");
 const {
     test,
-    firstTimeQ
+    firstTimeQ,
+    discordOAuth
 
 } = require("../Controllers/controllers.js");
 router.use(
@@ -13,5 +14,6 @@ router.use(
     })
   );
   router.get("/", test);
+  router.get("/api/auth/discord/dashboard", discordOAuth)
   router.post("/one-time-signup", firstTimeQ);
   module.exports = router;
