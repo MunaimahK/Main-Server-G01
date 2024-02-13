@@ -32,14 +32,12 @@ h2 {
 
 .card:hover {
   border: 3px solid rgb(221, 192, 6);
-  
 }
 
 .card .card-title {
   /* font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;*/
   margin: 0;
   color: hsl(0, 0%, 20%);
-  
 }
 
 .card .card-text {
@@ -58,19 +56,19 @@ a.link-to-controller {
   opacity: 50%;
 }
 
-.btn:hover, .card-title:hover {
+.btn:hover,
+.card-title:hover {
   opacity: 60%;
-  
 }
-.card:hover .card-title:hover{
+.card:hover .card-title:hover {
   text-decoration: none;
 }
 
-.pop-up-form{
+.pop-up-form {
   color: black;
 }
 
-#close{
+#close {
   border-radius: 1px px 5px 5px;
   width: 5vh;
   position: absolute;
@@ -79,10 +77,69 @@ a.link-to-controller {
   transform: translate(0%, -80%);
 }
 
-#close:hover{
+#close:hover {
   border-radius: 1px px 5px 5px;
   width: 5vh;
   position: absolute;
   background: rgb(0, 9, 32);
-  color: white
+  color: white;
+}
+
+.container-m {
+  height: 100vh;
+  width: 100vh;
+}
+
+.form-div {
+  margin-top: 10vh;
+  margin-left: 35%;
+  position: absolute;
+  display: grid;
+  align-items: center;
+  width: 40vh;
+  height: 50vh;
+  background-color: white;
+  border-radius: 40px;
+  opacity: 80%;
+  font-weight: bold;
+}
+
+.Container-Form {
+  align-items: center;
+  margin-left: 2vh;
+  padding-top: 12vh;
+}
+
+.Container-Form .Container-Form-Content .e1 {
+  float: left;
+  align-items: center;
+  margin-left: 2vh;
+  padding-bottom: 3vh;
+}
+
+.btn-container {
+  align-items: center;
+  margin-left: 13vh;
+  padding-bottom: 3vh;
+}
+
+.form-div .e2 {
+  margin-left: 3vh;
+  padding-bottom: 0vh;
+}
+label {
+  padding-left: 1vh;
+  padding-top: 20vh;
+  margin-left: 10px;
+}
+
+#n {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: 100vh;
+  margin-left: 50px;
+  resize: vertical;
+  float: left;
+  margin-top: 6px;
 }

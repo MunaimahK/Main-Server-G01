@@ -1,9 +1,14 @@
 const mongoose = require("mongoose");
 const User = mongoose.Schema(
   {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "oauthModel",
+    },
     name: String,
     major: String,
-    gradDate: String
+    gradDate: String,
     /*
     name: String,
     username: String,

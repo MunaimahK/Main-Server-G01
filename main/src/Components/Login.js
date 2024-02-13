@@ -18,7 +18,7 @@ const Login = () => {
       <div className="start">
         <h1>Influx</h1>
         <div>
-          <a href="https://discord.com/api/oauth2/authorize?client_id=1179068530273034290&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2Fapi%2Fauth%2Fdiscord%2Fdashboard&scope=identify+email">
+          <a href="https://discord.com/api/oauth2/authorize?client_id=1206671973191516211&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2Fapi%2Fauth%2Fdiscord%2Fdashboard&scope=identify+email">
             Start Now
           </a>
         </div>

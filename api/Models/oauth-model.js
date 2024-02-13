@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 const UserOAuth = mongoose.Schema(
   {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "oauthModel",
+    },
     discordId: { type: String, unique: true },
     username: { type: String, unique: true },
     avatar: { type: String, unique: true },
