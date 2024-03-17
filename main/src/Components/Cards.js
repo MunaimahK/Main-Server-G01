@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Model from "react-modal";
 import toast from "react-hot-toast";
+import { useParams } from "react-router-dom";
 
 const Cards = (props) => {
   const navigate = useNavigate();
@@ -12,34 +13,48 @@ const Cards = (props) => {
     name: "",
     major: "",
     gradDate: "",
+    clubName: "",
   });
 
-  const redirect = () => {
-    navigate("");
-  };
   const basicQ = async (e) => {
+    axios.defaults.withCredentials = true;
     e.preventDefault();
-    const { name, major, gradDate } = data;
+    const { name, major, gradDate, clubName } = data;
     try {
-      // currently sending data to post api in Main Server Backend 3001
-      // Try sending data to post api in Controller Backend
-      const { data } = await axios.post(
-        "http://localhost:3001/one-time-signup",
-        {
-          name,
-          major,
-          gradDate,
-        },
-        true
-      );
+      const { data } = await axios
+        .post(
+          "http://localhost:3001/one-time-signup",
+          {
+            name,
+            major,
+            gradDate,
+            clubName,
+          },
+          true
+        )
+        .then((res) => {
+          if (res.data.error) {
+            console.log("Already added");
+            setOpen(false);
+          } else {
+            if (clubName === "KnightHacks") {
+              window.location.replace("http://localhost:3002/");
+            } else if (clubName === "Hack@UCF") {
+              window.location.replace("http://localhost:8000");
+            } else {
+              window.location.replace("http://localhost:3000");
+            }
+          }
+        });
       if (data.error) {
         toast.error(data.error);
       } else {
         setData({});
         toast.success("Registration Succesful. Welcome!");
+
         // TO DO: Figure out how to redirect to the proper controller based on name/IP
         // hardcoding the value will not work for multiple clubs
-        window.location.replace("http://localhost:3002/");
+        //window.location.replace("http://localhost:3002/");
       }
     } catch (error) {
       console.log(error);
@@ -47,20 +62,36 @@ const Cards = (props) => {
   };
   const joinClub = async (e) => {
     e.preventDefault();
-    const { name, major, gradDate } = data;
-
-    // TO DO: Implement functionality/condition so Model opens ONLY when user is first time member of ANY Club
-    setOpen(true);
+    // Make an API call to retrieve if the user string "clubs" is popualted. If so, setOpen(false) == setOpen(!API Return)
+    const data = await axios
+      .get("http://localhost:3001/isEnrolled")
+      .then((res) => {
+        if (res.data.error) {
+          console.log(res.data.error);
+          console.log(res.data);
+          // console.log("Already added");
+          setOpen(false);
+          if (res.data.clubName === "KnightHacks") {
+            console.log(res.data.clubName);
+            window.location.replace("http://localhost:3002/");
+          } else if (res.data.clubName === "Hack@UCF") {
+            window.location.replace("http://localhost:8000");
+          } else {
+            window.location.replace("http://localhost:8000");
+          }
+        } else if (!res.data.error) {
+          console.log(res.data.error);
+          setOpen(true);
+        }
+      });
   };
 
-  // TO DO: Finish styling Model
   return (
     <div className="card">
-      <a href={props.link} className="link-to-controller">
-        <img className="card-img" src={props.img} alt="c1-logo"></img>
-        <h2 className="card-title">{props.title}</h2>
-        <p className="card-text">{props.text}</p>
-      </a>
+      <img className="card-img" src={props.img} alt="c1-logo"></img>
+      <h2 className="card-title">{props.title}</h2>
+      <p className="card-text">{props.text}</p>
+
       <button className="btn" type="submit" onClick={joinClub}>
         Join {props.title}
       </button>
@@ -114,6 +145,19 @@ const Cards = (props) => {
                     value={data.gradDate || ""}
                     onChange={(e) =>
                       setData({ ...data, gradDate: e.target.value })
+                    }
+                  ></input>
+                </div>
+                <div className="e1">
+                  <label id="l">Club Name</label>
+                  <br></br>
+                  <input
+                    id="n"
+                    type="text"
+                    placeholder="Which club would you like to sign up for?"
+                    value={data.clubName || ""}
+                    onChange={(e) =>
+                      setData({ ...data, clubName: e.target.value })
                     }
                   ></input>
                 </div>

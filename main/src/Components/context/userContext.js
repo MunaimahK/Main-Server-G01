@@ -10,7 +10,7 @@ export function UserContextProvider({ children }) {
   useEffect(() => {
     console.log(user);
     if (!user) {
-      axios.get("/profile-discord").then(({ data }) => {
+      axios.get("/profile").then(({ data }) => {
         setUser(data);
         console.log(data);
       });

@@ -12,10 +12,12 @@
   --second-color: rgb(195, 188, 167);
   --black-color: black;
 }
-
-body#log-in {
+#root {
   background: radial-gradient(ellipse at bottom, rgb(27, 46, 90), rgb(0, 0, 0));
-  /*
+}
+body#log-in {
+  /* background: radial-gradient(ellipse at bottom, rgb(27, 46, 90), rgb(0, 0, 0));
+  
   background-image: url("../BGGradient.png");
   background-position: center;
   background-size: cover;
@@ -34,12 +36,31 @@ a:hover {
 
 .wrapper {
   width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   background-color: rgba(0, 0, 0, 0.2);
+  background: radial-gradient(ellipse at bottom, rgb(27, 46, 90), rgb(0, 0, 0));
+  background-size: cover;
 }
+.form-div {
+  margin-top: 0vh;
+  margin-left: 0%;
+
+  position: relative;
+  display: grid;
+  align-items: center;
+  width: 100vh;
+  height: 100vh;
+  background: radial-gradient(ellipse at bottom, rgb(27, 46, 90), rgb(0, 0, 0));
+
+  opacity: 100%;
+  font-weight: bold;
+  border-radius: 15px;
+}
+
 .login_box {
   position: relative;
   width: 450px;
@@ -118,7 +139,8 @@ a:hover {
   position: absolute;
   top: 15px;
   left: 20px;
-  transition: 0.2s;
+  transition: 0.3s;
+  opacity: 0;
 }
 
 .input_field:focus ~ .label,
@@ -131,6 +153,7 @@ a:hover {
   border-radius: 30px;
   color: var(--black-color);
   padding: 0 10px;
+  opacity: 100%;
 }
 
 .icon {

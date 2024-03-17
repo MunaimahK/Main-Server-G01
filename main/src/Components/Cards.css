@@ -66,6 +66,7 @@ a.link-to-controller {
 
 .pop-up-form {
   color: black;
+  height: 10vh;
 }
 
 #close {
@@ -142,4 +143,7 @@ label {
   resize: vertical;
   float: left;
   margin-top: 6px;
+}
+#Model {
+  background-color: aqua;
 }

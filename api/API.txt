@@ -1,0 +1,48 @@
+discordOauth
+    1. discord oauth gateway, authorize user, search by username, and input in database
+    2. assign a JWT Token to page only if oauth succesful, redirect to dashboard
+
+firstTimeQ
+    // this is a gateway API call to the first time API on controller server
+    // we take information from frontend modal, pass to contorller api
+        controller: firstTimeQ
+            1. check if fields are populated
+            2. Add user to controller DB
+    // update the user on influx main to reflect the club just added to
+
+
+List of APIs and Actions:
+Influx Main:
+
+Discord oauth
+Once on the dashboard, assign the authorizd user a JWT Token
+Create a user profile on Influx Dashboard
+    Send JWT Token to frontend to create the "user" dashboard
+
+The JWT Token is used to complete the following tasks for the authorized user:
+    Decide if joining a club calls firstTimeSignUp API or BorrowFromController
+    Once added to a club, update the user's clubs field with the club added to
+        This also depends on the token to identify a user
+
+Once the user's club's string is populated, do not make a call to firstTimeSignUp
+    Always borrow info from club that the user is in
+Once the user joins a club, change the Club button on dashboard from "Join Club!" To something else
+
+Create Admin on Influx Main dashboard  
+    Complete Log In functionality
+    Complete Sign Up functionality
+    Complete Profile functionaloty for Admin
+    Add admin page to add a new club
+        Research and implement connectivity between Influx and new contorller
+
+Per controller
+    Club home page
+    Display club events to events page
+    Club Admin  
+        Login functionality
+        Sign Up functionality
+        User Profile functionality
+
+
+
+

@@ -11,6 +11,7 @@ import Admin from "./Components/Admin.js";
 import AdminSignUp from "./Components/AdminSignUp.js";
 import AdminLogin from "./Components/AdminLogin.js";
 import About from "./Components/About.js";
+import { UserContextProvider } from "./Components/context/userContext.js";
 
 // Knight Hacks img 1 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIHZlnuvnNWPsSs-9iltSdMx3fEjByztOWDgsNdVLPlDZjTUMyuRwRonlvENldynzVEzA&usqp=CAU"
 // Knight Hacks img 2 = https://avatars.githubusercontent.com/u/11686531?s=200&v=4
@@ -18,7 +19,7 @@ axios.defaults.baseURL = "http://localhost:3001";
 axios.defaults.withCredentials = true;
 function App() {
   return (
-    <Router>
+    <UserContextProvider>
       <Routes>
         <Route path="/" element={<Login />}></Route>
         <Route path="/admin" element={<Admin />}></Route>
@@ -62,7 +63,7 @@ function App() {
           }}
         />
       </Routes>
-    </Router>
+    </UserContextProvider>
   );
 }
 
