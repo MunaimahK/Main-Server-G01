@@ -13,7 +13,7 @@
   --black-color: black;
 }
 #root {
-  background: radial-gradient(ellipse at bottom, rgb(27, 46, 90), rgb(0, 0, 0));
+  /* background: radial-gradient(ellipse at bottom, rgb(27, 46, 90), rgb(0, 0, 0));*/
 }
 body#log-in {
   /* background: radial-gradient(ellipse at bottom, rgb(27, 46, 90), rgb(0, 0, 0));

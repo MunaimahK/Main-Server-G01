@@ -21,6 +21,8 @@ h2 {
   justify-content: space-around;
   display: inline-block;
 }
+.card-container {
+}
 
 .card-img {
   max-width: 80%;

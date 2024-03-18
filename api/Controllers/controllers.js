@@ -115,6 +115,15 @@ const profile = (req, res) => {
 
 // Discord O Auth endpoint; redirect to dashboard
 const discordOAuth = async (req, res) => {
+  try {
+    const token = req.cookies.access_token;
+    if (token) {
+      res.clearCookie(token);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+
   // Retreive code from query string url
   // Code is used to get an access token
   const { code } = req.query;

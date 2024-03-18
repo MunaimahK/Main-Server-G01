@@ -5,6 +5,7 @@ import axios from "axios";
 import Model from "react-modal";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
+import ClubStats from "./ClubStats";
 
 const Cards = (props) => {
   const navigate = useNavigate();
@@ -60,24 +61,29 @@ const Cards = (props) => {
       console.log(error);
     }
   };
-  const joinClub = async (e) => {
-    e.preventDefault();
+
+  // Determines if the pop up form should be opened and if so, which club to redirect to
+  const joinClub = async (title) => {
+    //  e.preventDefault();
     // Make an API call to retrieve if the user string "clubs" is popualted. If so, setOpen(false) == setOpen(!API Return)
     const data = await axios
       .get("http://localhost:3001/isEnrolled")
       .then((res) => {
         if (res.data.error) {
           console.log(res.data.error);
-          console.log(res.data);
+          console.log(res.data.clubName);
           // console.log("Already added");
           setOpen(false);
+          // FIX HERE
+          // STRING SPLICE THE CLUBNAMES AND MATCH TO CLUB
           if (res.data.clubName === "KnightHacks") {
             console.log(res.data.clubName);
             window.location.replace("http://localhost:3002/");
           } else if (res.data.clubName === "Hack@UCF") {
-            window.location.replace("http://localhost:8000");
+            // window.location.replace("http://localhost:8000/");
           } else {
-            window.location.replace("http://localhost:8000");
+            // window.location.replace("http://localhost:8000");
+            window.location.replace("http://localhost:3002/");
           }
         } else if (!res.data.error) {
           console.log(res.data.error);
@@ -86,14 +92,28 @@ const Cards = (props) => {
       });
   };
 
+  // Dynamic Component for Club Stats
+  const stats = [
+    {
+      clubName: "clubName",
+      paidDues: "Boolean",
+    },
+  ];
+
+  const statsComponent = stats.map((stat) => (
+    <ClubStats clubName={stat.clubName} paidDues={stat.paidDues} />
+  ));
+
   return (
     <div className="card">
       <img className="card-img" src={props.img} alt="c1-logo"></img>
       <h2 className="card-title">{props.title}</h2>
       <p className="card-text">{props.text}</p>
 
-      <button className="btn" type="submit" onClick={joinClub}>
-        Join {props.title}
+      <div>{stats.length == 0 ? <div></div> : <div>{statsComponent}</div>}</div>
+
+      <button className="btn" type="submit" onClick={joinClub(props.title)}>
+        Go to {props.title}
       </button>
       <Model
         ariaHideApp={false}
