@@ -1,0 +1,56 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap");
+
+body {
+  background-color: rgb(12, 25, 59); /* dark blue background */
+  font-family: "Poppins", sans-serif; /* added font family info here */
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: radial-gradient(ellipse at bottom, rgb(12, 25, 59), rgb(0, 0, 0)); /* dark blue to black gradient background */
+  padding: 20px 80px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+}
+
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-bar li {
+  list-style: none;
+  padding: 0 20px;
+  position: relative;
+}
+
+.nav-bar li a {
+  text-decoration: none;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: aliceblue;
+}
+
+.nav-bar li a:hover {
+  color: rgb(221, 192, 6); /* turns yellow on hover */
+}
+
+.nav-bar li a:hover::after {
+  content: "";
+  width: 55%;
+  height: 2px;
+  background: rgb(221, 192, 6); /* yellow underline on hover */
+  position: absolute;
+  bottom: -4px;
+  left: 20px;
+}
+
+a.logo {
+  margin-left: -50px;
+}
+
+.profile-img {
+  max-height: 40px;
+}
