@@ -14,7 +14,11 @@ body {
 }
 
 .about-content {
-  background: radial-gradient(ellipse at bottom, rgb(12, 25, 59), rgb(0, 0, 0)); /* dark blue to black gradient background */
+  background: radial-gradient(
+    ellipse at bottom,
+    rgb(12, 25, 59),
+    rgb(0, 0, 0)
+  ); /* dark blue to black gradient background */
   padding: 20px;
   border-radius: 15px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
@@ -29,4 +33,17 @@ body {
 
 .about-content p {
   line-height: 1.6;
+}
+
+.arrow {
+  border: solid rgb(255, 255, 255);
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+  float: left;
+}
+
+.left {
+  transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
 }

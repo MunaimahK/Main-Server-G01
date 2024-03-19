@@ -13,6 +13,8 @@ import AdminLogin from "./Components/AdminLogin.js";
 import About from "./Components/About.js";
 import { UserContextProvider } from "./Components/context/userContext.js";
 import DuesStats from "./Components/DuesStats.js";
+import AboutNew from "./Components/AboutNew.js";
+import FAQ from "./Components/FAQ.js";
 
 // Knight Hacks img 1 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIHZlnuvnNWPsSs-9iltSdMx3fEjByztOWDgsNdVLPlDZjTUMyuRwRonlvENldynzVEzA&usqp=CAU"
 // Knight Hacks img 2 = https://avatars.githubusercontent.com/u/11686531?s=200&v=4
@@ -26,7 +28,9 @@ function App() {
         <Route path="/admin" element={<Admin />}></Route>
         <Route path="/admin/login" element={<AdminLogin />}></Route>
         <Route path="/admin/signup" element={<AdminSignUp />}></Route>
-        <Route path="/about" element={<About />}></Route>
+        <Route path="/about" element={<AboutNew />}></Route>
+        <Route path="/influx/faq" element={<FAQ />}></Route>
+
         <Route
           path="/dashboard"
           element={

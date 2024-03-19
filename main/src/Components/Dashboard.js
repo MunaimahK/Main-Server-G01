@@ -18,10 +18,10 @@ const Dashboard = () => {
             </a>
           </li>
           <li>
-            <a href="/">Clubs</a>
+            <a href="/dashboard">Clubs</a>
           </li>
           <li>
-            <a href="/">FAQ</a>
+            <a href="/influx/faq">FAQ</a>
           </li>
           <li>
             <a href="/admin/login" onClick="defaultAdmin()">

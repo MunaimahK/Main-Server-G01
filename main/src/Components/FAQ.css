@@ -14,8 +14,12 @@ body {
 }
 
 .faq-content {
-  background: radial-gradient(ellipse at bottom, rgb(12, 25, 59), rgb(0, 0, 0)); /* dark blue to black gradient background */
-  padding: 20px;
+  background: radial-gradient(
+    ellipse at bottom,
+    rgb(12, 25, 59),
+    rgb(0, 0, 0)
+  ); /* dark blue to black gradient background */
+  padding: 30px;
   border-radius: 15px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
   color: white;
@@ -30,4 +34,17 @@ body {
 .faq-answer {
   font-size: 16px;
   margin-bottom: 20px;
+}
+.arrow {
+  border: solid rgb(255, 255, 255);
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+  float: left;
+  margin-right: 3vh;
+}
+
+.left {
+  transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
 }
