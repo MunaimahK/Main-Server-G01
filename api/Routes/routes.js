@@ -12,6 +12,8 @@ const {
   isEnrolled,
   Login,
   Logout,
+  checkDues,
+  retrieveCQ,
 } = require("../Controllers/controllers.js");
 router.use(
   cors({
@@ -33,6 +35,9 @@ router.get("/isEnrolled", authenticate, isEnrolled);
 router.post("/login", Login);
 router.get("/profile", profile);
 router.get("/logout", Logout);
+router.post("/check-dues", authenticate, checkDues);
+router.post("/retrieve-custom-q", authenticate, retrieveCQ);
+
 /*
 router.get("/posts", authenticateToken, (req, res) => {
   res.json(posts.filter((post) => post.username === req.username));

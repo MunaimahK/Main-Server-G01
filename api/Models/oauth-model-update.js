@@ -1,18 +1,18 @@
-/*const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 const UserOAuth = mongoose.Schema(
   {
     discordId: { type: String, unique: true },
     UID: String,
     username: { type: String, unique: true },
     avatar: { type: String, unique: true },
-    clubs: String,
+    clubs: [{ clubName: String }],
     qrcode: String,
   },
   {
     collection: "main",
   }
 );
-
+/*
 UserOAuth.statics.isThisDiscordIdPresent = async function(username) {
   try {
     const user = await this.findOne({ username: username });
@@ -32,6 +32,6 @@ UserOAuth.statics.isThisDiscordIdPresent = async function(username) {
 // collection specifies where the schema is inserted
 // bu default uses users collection in Mongo
 // Specified to main collection inside of the iNflux-main DB
-
-const oauthModel = mongoose.model("oauthModel", UserOAuth);
-module.exports = oauthModel;*/
+*/
+const oauthModelU = mongoose.model("oauthModel", UserOAuth);
+module.exports = oauthModelU;

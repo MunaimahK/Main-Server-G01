@@ -38,9 +38,10 @@ function App() {
                   img={
                     "https://avatars.githubusercontent.com/u/11686531?s=200&v=4"
                   }
-                  title="Knight Hacks"
+                  title="KnightHacks"
                   text="Join the Hackathon!"
                   redirect="http://localhost:3002/"
+                  redirect_b="http://localhost:8000"
                 />
                 <Cards
                   link="https://knightconnect.campuslabs.com/engage/organization/acducf"
@@ -50,6 +51,7 @@ function App() {
                   title="Hack@UCF"
                   text="Hi Cybersecurity"
                   redirect="/controller2"
+                  redirect_b="http://localhost:8000"
                 />
               </div>
             </>

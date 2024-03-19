@@ -3,13 +3,17 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Model from "react-modal";
-import toast from "react-hot-toast";
+
 import { useParams } from "react-router-dom";
 import ClubStats from "./ClubStats";
+
+import { toast, useToast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Cards = (props) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [Dues, setDues] = useState("No");
   const [data, setData] = useState({
     name: "",
     major: "",
@@ -38,13 +42,14 @@ const Cards = (props) => {
             console.log("Already added");
             setOpen(false);
           } else {
+            /*
             if (clubName === "KnightHacks") {
               window.location.replace("http://localhost:3002/");
             } else if (clubName === "Hack@UCF") {
               window.location.replace("http://localhost:8000");
             } else {
               window.location.replace("http://localhost:3000");
-            }
+            }*/
           }
         });
       if (data.error) {
@@ -52,46 +57,168 @@ const Cards = (props) => {
       } else {
         setData({});
         toast.success("Registration Succesful. Welcome!");
-
-        // TO DO: Figure out how to redirect to the proper controller based on name/IP
-        // hardcoding the value will not work for multiple clubs
-        //window.location.replace("http://localhost:3002/");
       }
     } catch (error) {
       console.log(error);
     }
-  };
 
-  // Determines if the pop up form should be opened and if so, which club to redirect to
+    setOpen(false);
+  };
+  const joinClub = async (req, res) => {
+    const cardTitle = props.title;
+    const redirect = props.redirect;
+    const redirect_b = props.redirect_b;
+
+    console.log(cardTitle);
+
+    if (req) {
+      console.log("REQUEST", req);
+    }
+    try {
+      const call = await axios
+        .get("http://localhost:3001/isEnrolled")
+        .then(async (res) => {
+          console.log(res);
+          console.log("Before if:", res.data.error);
+          if (res.data.error) {
+            console.log(res.data.error);
+
+            console.log("is this an array", Array.isArray(res.data.clubName));
+            let i = 0;
+            let clubTitle = "";
+            // Go through the clubs array for this user. If the user is enrolled in teh club the card button represents, visit
+            // If not, check for custom Q's and then update enrollment
+            for (i = 0; i < res.data.clubName.length; i++) {
+              clubTitle = res.data.clubName[i].clubName;
+              console.log(clubTitle);
+              console.log("type clubTitle: ", typeof clubTitle);
+              console.log("type cardTitle: ", typeof cardTitle);
+              console.log(
+                "Are they equal?: ",
+                clubTitle.toString() === cardTitle.toString()
+              );
+              console.log("cardTitle: ", cardTitle);
+              console.log("clubTitle: ", clubTitle);
+
+              if (clubTitle === cardTitle.toString()) {
+                console.log("title props: ", clubTitle);
+                console.log("title props: ", cardTitle);
+                window.location.replace(`${redirect}`);
+                setOpen(false);
+                // break;
+              } else {
+                // setOpen(true);
+                console.log("Club Not Enrolled");
+                toast({ error: "Club Not Enrolled" });
+                // This is where we now ask for custom questions if any
+                // If there isn't then just borrow info from the other club
+
+                try {
+                  const x = await axios
+                    .post("/retrieve-custom-q", { redirect_b }, true)
+                    .then((res) => {
+                      console.log("Connected:", res.data.stat);
+                      console.log("Will be redirected to:", res.data.r);
+                    });
+                } catch (err) {
+                  console.log(err);
+                }
+              }
+            }
+          } else {
+            //if (true) {
+            setOpen(true);
+            /*} else {
+              try {
+                const x = await axios
+                  .post("/retrieve-custom-q", { redirect_b }, true)
+                  .then((res) => {
+                    console.log("Connected:", res.data.stat);
+                    console.log("Will be redirected to:", res.data.r);
+                  });
+              } catch (err) {
+                console.log(err);
+              }
+            }*/
+
+            // joinClub();
+            console.log(res.data.error);
+          }
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  /*
   const joinClub = async (title) => {
     //  e.preventDefault();
-    // Make an API call to retrieve if the user string "clubs" is popualted. If so, setOpen(false) == setOpen(!API Return)
-    const data = await axios
-      .get("http://localhost:3001/isEnrolled")
-      .then((res) => {
-        if (res.data.error) {
-          console.log(res.data.error);
-          console.log(res.data.clubName);
-          // console.log("Already added");
-          setOpen(false);
-          // FIX HERE
-          // STRING SPLICE THE CLUBNAMES AND MATCH TO CLUB
-          if (res.data.clubName === "KnightHacks") {
+    console.log("title props: ", props.title);
+    const cardTitle = props.title;
+    const redirect = props.redirect;
+    const redirect_b = props.redirect_b;
+    
+    try {
+      const call = await axios
+        .get("http://localhost:3001/isEnrolled")
+        .then(async (res) => {
+          console.log(res);
+          if (res.data.error) {
+            console.log(res.data.error);
             console.log(res.data.clubName);
-            window.location.replace("http://localhost:3002/");
-          } else if (res.data.clubName === "Hack@UCF") {
-            // window.location.replace("http://localhost:8000/");
-          } else {
-            // window.location.replace("http://localhost:8000");
-            window.location.replace("http://localhost:3002/");
-          }
-        } else if (!res.data.error) {
-          console.log(res.data.error);
-          setOpen(true);
-        }
-      });
-  };
+            console.log("is this an array", Array.isArray(res.data.clubName));
+            let i = 0;
+            let clubTitle = "";
+            // Go through the clubs array for this user. If the user is enrolled in teh club the card button represents, visit
+            // If not, check for custom Q's and then update enrollment
+            for (i = 0; i < res.data.clubName.length; i++) {
+              clubTitle = res.data.clubName[i].clubName;
+              console.log(clubTitle);
+              console.log("type clubTitle: ", typeof clubTitle);
+              console.log("type cardTitle: ", typeof cardTitle);
+              console.log(
+                "Are they equal?: ",
+                clubTitle.toString() === cardTitle.toString()
+              );
+              console.log("cardTitle: ", cardTitle);
+              console.log("clubTitle: ", clubTitle);
 
+              if (clubTitle === cardTitle.toString()) {
+                console.log("title props: ", clubTitle);
+                console.log("title props: ", cardTitle);
+                window.location.replace(`${redirect}`);
+                setOpen(false);
+                // break;
+              } else {
+                setOpen(true);
+                console.log("Club Not Enrolled");
+                toast({ error: "Club Not Enrolled" });
+                // This is where we now ask for custom questions if any
+                // If there isn't then just borrow info from the other club
+
+                // const x = await axios.get(`${redirect}/retrieve-custom-q`);
+                try {
+                  const x = await axios
+                    .post("/retrieve-custom-q", { redirect_b }, true)
+                    .then((res) => {
+                      console.log("Connected:", res.data.stat);
+                      console.log("Will be redirected to:", res.data.r);
+                    });
+                } catch (err) {
+                  console.log(err);
+                }
+              }
+            }
+          } else if (!res.data.error) {
+            // setOpen(true);
+            // joinClub();
+            console.log(res.data.error);
+          }
+        });
+    } catch (err) {
+      console.log(err);
+    }
+    // Make an API call to retrieve if the user string "clubs" is popualted. If so, setOpen(false) == setOpen(!API Return)
+  };*/
   // Dynamic Component for Club Stats
   const stats = [
     {
@@ -104,15 +231,43 @@ const Cards = (props) => {
     <ClubStats clubName={stat.clubName} paidDues={stat.paidDues} />
   ));
 
+  const dues = async () => {
+    try {
+      const clubName = props.title;
+      console.log("ClubName", clubName);
+      const duesBool = await axios
+        .post("http://localhost:3001/check-dues", {
+          clubName,
+        })
+        .then((res) => {
+          console.log(res.data.error);
+          // setDues("true");
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div className="card">
       <img className="card-img" src={props.img} alt="c1-logo"></img>
       <h2 className="card-title">{props.title}</h2>
       <p className="card-text">{props.text}</p>
 
-      <div>{stats.length == 0 ? <div></div> : <div>{statsComponent}</div>}</div>
+      <div>
+        {stats.length === 0 ? (
+          <div></div>
+        ) : (
+          <div>
+            <button onClick={dues}>Paid Dues Yet?</button>
+            {stats.map((stat) => (
+              <ClubStats clubName={props.title} paidDues={Dues} />
+            ))}
+          </div>
+        )}
+      </div>
 
-      <button className="btn" type="submit" onClick={joinClub(props.title)}>
+      <button className="btn" type="submit" onClick={() => joinClub()}>
         Go to {props.title}
       </button>
       <Model

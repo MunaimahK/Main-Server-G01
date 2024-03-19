@@ -3,6 +3,7 @@ const url = require("url");
 const axios = require("axios");
 const Member = require("../Models/member-model.js");
 const oauthModel = require("../Models/oauth-model.js");
+const U = require("../Models/oauth-model-update.js");
 const Admin = require("../Models/admin-model.js");
 const jwt = require("jsonwebtoken");
 const uuid = require("uuid");
@@ -15,7 +16,7 @@ let _uid = 0;
 let qrlink = null;
 // Test Endpoint
 const test = (req, res) => {
-  res.json("test is working");
+  res.json({ error: "test is working" });
 };
 
 // Default Admin Endpoint
@@ -115,10 +116,12 @@ const profile = (req, res) => {
 
 // Discord O Auth endpoint; redirect to dashboard
 const discordOAuth = async (req, res) => {
+  // HUGE ISSUE; TOKENS DON;T REFRESH WHICH BREAKS IMPLEMENTATION LATER
   try {
     const token = req.cookies.access_token;
     if (token) {
       res.clearCookie(token);
+      console.log("cleared");
     }
   } catch (error) {
     console.log(error);
@@ -157,8 +160,91 @@ const discordOAuth = async (req, res) => {
         },
       }
     );
-
     if (userResponse) {
+      const { id, username, avatar } = userResponse;
+      console.log(userResponse.username);
+
+      // check if user exists, if so, set counter to ignore it
+      const user = await U.findOne({
+        username: userResponse.username,
+      });
+
+      var count = 0;
+      if (user) {
+        count = 1;
+      }
+
+      var data = new U({
+        discordId: userResponse.id,
+        username: userResponse.username,
+        avatar: userResponse.avatar,
+        clubs: [],
+        UID: uuid.v4(),
+        qrcode: null,
+      });
+      if (count == 0) {
+        try {
+          await data.save();
+          const accessToken = jwt.sign(data.toJSON(), process.env.JWT_SECRET, {
+            expiresIn: "1d",
+          });
+          const refreshToken = jwt.sign(data.toJSON(), process.env.JWT_SECRET, {
+            expiresIn: "1d",
+          });
+          res
+            .cookie("access_token", accessToken, {
+              httpOnly: true,
+              secure: true,
+            })
+            .status(200);
+          res
+            .cookie("refresh_token", refreshToken, {
+              httpOnly: true,
+            })
+            .status(200);
+
+          const user1 = await U.findOneAndUpdate({
+            $push: {
+              clubs: { clubName: "Test" },
+            },
+          }).where(jwt.decode(accessToken)._id);
+        } catch (error) {
+          if (error.code == 11000) {
+            console.log(error);
+          }
+        }
+      }
+
+      if (user) {
+        // generate JWT Token to encode the current logged in user (user via OAuth)
+        // set the token (main server)
+        const accessToken = jwt.sign(user.toJSON(), process.env.JWT_SECRET, {
+          expiresIn: "1d",
+        });
+        const refreshToken = jwt.sign(user.toJSON(), process.env.JWT_SECRET, {
+          expiresIn: "1d",
+        });
+        res
+          .cookie("access_token", accessToken, {
+            httpOnly: true,
+            secure: true,
+          })
+          .status(200);
+        res
+          .cookie("refresh_token", refreshToken, {
+            httpOnly: true,
+          })
+          .status(200);
+
+        const user1 = await U.findOneAndUpdate({
+          $push: {
+            clubs: { clubName: "Test" },
+          },
+        }).where(jwt.decode(accessToken)._id);
+      }
+    }
+
+    /*if (userResponse) {
       const { id, username, avatar } = userResponse;
       console.log(userResponse.username);
 
@@ -211,7 +297,7 @@ const discordOAuth = async (req, res) => {
           })
           .status(200);
       }
-    }
+    }*/
   } else {
     // if the code not retrieved from URL query, then bad authorization request
     return json({
@@ -317,8 +403,6 @@ const qrGenerate = async (req, res) => {
       console.log("Internal Server Error");
     }
   }
-  //console.log(dataImage);
-  //}
 };
 
 const assignUID = async (req, res) => {
@@ -377,6 +461,8 @@ const firstTimeQ = async (req, res) => {
   }
 
   if (req.clubs == null) {
+    /*
+    for prior oauthmodel
     const user = await oauthModel
       .findOneAndUpdate({
         discordId: decodedToken.discordId,
@@ -387,6 +473,25 @@ const firstTimeQ = async (req, res) => {
         qrcode: null,
       })
       .where(decodedToken._id);
+*/
+    /*
+    const user = await U.findOneAndUpdate({
+      discordId: decodedToken.discordId,
+      username: decodedToken.username,
+      avatar: decodedToken.avatar,
+      clubs: clubName.clubName,
+      UID: decodedToken.UID,
+      qrcode: null,
+    }).where(decodedToken._id);*/
+
+    const user = await U.findOneAndUpdate({
+      $push: {
+        clubs: { clubName: "KnightHacks" },
+      },
+    }).where(decodedToken._id);
+
+    console.log("USER ARRAY CLUB: ", user.clubs);
+    console.log("USER ARRAY CLUB clubname: ", user.clubs.clubName);
 
     /*res.clearCookie();
     const accessToken = jwt.sign(user.toJSON(), process.env.JWT_SECRET, {
@@ -434,11 +539,20 @@ const authenticate = async (req, res, next) => {
 
 const isEnrolled = async (req, res, next) => {
   console.log("IS ENROLLED:  ", req.user.UID);
-
+  /*
   const member = await oauthModel.findOne({
     UID: req.user.UID,
   });
+  */
+  const member = await U.findOne({
+    UID: req.user.UID,
+  });
+
+  const test = await U.findOne({
+    UID: req.user.UID,
+  });
   console.log("member:  ", member);
+  console.log("member:  ", test);
   if (member) {
     console.log("IS ENROLLED CLUB:  ", member.clubs);
 
@@ -461,8 +575,93 @@ const isEnrolled = async (req, res, next) => {
   }
 };
 
+const checkDues = async (req, res, next) => {
+  try {
+    console.log("CHECK DUES API:  ", req.user.UID);
+    console.log("IS ENROLLED IN:  ", req.user.clubs);
+  } catch (err) {
+    //  console.log(req);
+    console.log("Err");
+  }
+  try {
+    const clubName = req.body.clubName;
+    console.log("ClubName", clubName);
+  } catch (err) {
+    console.log("Err in clubname from rew");
+  }
+
+  try {
+    const clubName = req.body.clubName;
+    console.log("ClubName", clubName);
+    const club = await U.find({
+      "clubs.clubName": { $regex: { clubName: clubName }, $options: "i" },
+    });
+
+    console.log(club);
+  } catch (err) {
+    console.log(err);
+    console.log("Err in club find by regex");
+  }
+
+  /*
+  const member = await oauthModel.findOne({
+    UID: req.user.UID,
+  });
+  */
+  res.json({
+    error: false,
+  }); /*
+  const member = await U.findOne({
+    UID: req.user.UID,
+  });
+  console.log("member:  ", member);
+  if (member) {
+    console.log("IS ENROLLED CLUB:  ", member.clubs);
+
+    console.log("member:  ", member);
+
+    if (member) {
+      try {
+        const response = await axios.get("http://localhost:8000/dues-status", {
+          params: {
+            UID: decodedToken.UID,
+          },
+        });
+        res.json(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
+      }
+    } else {
+      res.json({
+        error: false,
+      });
+    }
+  } else {
+    res.json({
+      error: false,
+    });
+  }*/
+};
 // Login Endpoint;endpoint connected to route in LoginOut.js
 
+const retrieveCQ = async (req, res) => {
+  const red_url = req.body.redirect_b;
+
+  try {
+    const data = await axios
+      .get(`${red_url}/custom-questions`)
+      // .get("http://localhost:8000/custom-questions")
+      .then((res) => {
+        console.log(res.data.error);
+        console.log("HELLO");
+      });
+  } catch (err) {
+    console.log(err);
+  }
+  res.json({ stat: "connected", r: red_url });
+};
 module.exports = {
   test,
   firstTimeQ,
@@ -475,4 +674,6 @@ module.exports = {
   Login,
   profile,
   Logout,
+  checkDues,
+  retrieveCQ,
 };
