@@ -15,6 +15,8 @@ import { UserContextProvider } from "./Components/context/userContext.js";
 import DuesStats from "./Components/DuesStats.js";
 import AboutNew from "./Components/AboutNew.js";
 import FAQ from "./Components/FAQ.js";
+import AddClub from "./Components/AddClub.js";
+import RenderControllers from "./Components/RenderControllers.js";
 
 // Knight Hacks img 1 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIHZlnuvnNWPsSs-9iltSdMx3fEjByztOWDgsNdVLPlDZjTUMyuRwRonlvENldynzVEzA&usqp=CAU"
 // Knight Hacks img 2 = https://avatars.githubusercontent.com/u/11686531?s=200&v=4
@@ -30,13 +32,33 @@ function App() {
         <Route path="/admin/signup" element={<AdminSignUp />}></Route>
         <Route path="/about" element={<AboutNew />}></Route>
         <Route path="/influx/faq" element={<FAQ />}></Route>
+        <Route path="/admin/add/club" element={<AddClub />}></Route>
+        <Route
+          path="/see/all/controllers"
+          element={<RenderControllers />}
+        ></Route>
 
         <Route
           path="/dashboard"
           element={
             <>
               <Dashboard />
-              <div className="card-container">
+            </>
+          }
+        />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route
+          path="/KnightHacks"
+          component={() => {
+            window.location.href = "https://localhost:3002";
+            return null;
+          }}
+        />
+      </Routes>
+    </UserContextProvider>
+  );
+}
+/*<div className="card-container">
                 <Cards
                   link="http://localhost:3002/"
                   img={
@@ -54,24 +76,8 @@ function App() {
                   }
                   title="Hack@UCF"
                   text="Hi Cybersecurity"
-                  redirect="/controller2"
-                  redirect_b="http://localhost:8000"
+                  redirect="http://localhost:3003"
+                  redirect_b="http://localhost:8001"
                 />
-              </div>
-            </>
-          }
-        />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route
-          path="/KnightHacks"
-          component={() => {
-            window.location.href = "https://localhost:3002";
-            return null;
-          }}
-        />
-      </Routes>
-    </UserContextProvider>
-  );
-}
-
+              </div> */
 export default App;

@@ -21,6 +21,7 @@ h2 {
   max-width: 250px;
   justify-content: space-around;
   display: inline-block;
+  margin-top: 7vh;
 }
 .card-container {
 }
@@ -28,6 +29,7 @@ h2 {
 .card-img {
   max-width: 80%;
   max-height: 200px;
+  min-height: 180px;
   border-radius: 80%;
   margin-bottom: 10px;
   object-fit: cover;

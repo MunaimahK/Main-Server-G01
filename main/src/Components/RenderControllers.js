@@ -3,11 +3,10 @@ import axios from "axios";
 import Cards from "./Cards";
 import { useState, useEffect } from "react";
 
-const DuesStats = (props) => {
-  const [dues, setDues] = useState([{ paidDues: true }]);
-
-  const redirect_b =
-    props.redirect_b; /*
+const RenderControllers = () => {
+  const [clubs, setClubs] = useState([
+    { ClubName: "Test" },
+  ]); /*
   const getControllers = async (req, res) => {
     try {
       const data = await axios.get("/controllers").then((res) => {
@@ -23,24 +22,22 @@ const DuesStats = (props) => {
 
   useEffect(() => {
     axios
-      .get("/check-due-payment", {
-        redirect_b,
-      })
+      .get("/controllers")
       .then((response) => {
         console.log("RES:", response);
-        setDues(response.data);
+        setClubs(response.data);
       })
       .catch((error) => {
         console.error("Error fetching documents:", error);
       });
   }, []);
 
-  const clubComponent = dues.map((club) => (
+  const clubComponent = clubs.map((club) => (
     <Cards
       title={club.name}
       text={club.text}
       img={club.logo}
-      redirect={club.fronted}
+      redirect={club.frontend}
       redirect_b={club.backend}
     />
   ));
@@ -48,4 +45,4 @@ const DuesStats = (props) => {
   return <div>{clubComponent}</div>;
 };
 
-export default DuesStats;
+export default RenderControllers;

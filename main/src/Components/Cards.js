@@ -1,6 +1,6 @@
 import "./Cards.css";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { redirect, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Model from "react-modal";
 
@@ -9,19 +9,26 @@ import ClubStats from "./ClubStats";
 
 import { toast, useToast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import RenderDueStats from "./RenderDueStats";
+import CustomQForm from "./CustomQForm";
 
 const Cards = (props) => {
   const navigate = useNavigate();
+  const [Dues, setDues] = useState("no");
   const [open, setOpen] = useState(false);
-  const [Dues, setDues] = useState("No");
   const [data, setData] = useState({
     name: "",
     major: "",
     gradDate: "",
     clubName: "",
   });
+  const [payment, setPayment] = useState([{}]);
 
   const basicQ = async (e) => {
+    const backend_url = props.redirect_b;
+    const frontend_url = props.redirect;
+    console.log("BACKEND URL: ", backend_url);
+    console.log("FRONTED URL: ", frontend_url);
     axios.defaults.withCredentials = true;
     e.preventDefault();
     const { name, major, gradDate, clubName } = data;
@@ -34,22 +41,30 @@ const Cards = (props) => {
             major,
             gradDate,
             clubName,
+            backend_url,
           },
           true
         )
-        .then((res) => {
+        .then(async (res) => {
           if (res.data.error) {
             console.log("Already added");
             setOpen(false);
           } else {
-            /*
-            if (clubName === "KnightHacks") {
-              window.location.replace("http://localhost:3002/");
-            } else if (clubName === "Hack@UCF") {
-              window.location.replace("http://localhost:8000");
-            } else {
-              window.location.replace("http://localhost:3000");
-            }*/
+            // first time club's custom questions are checked here:
+            try {
+              const cQ = await axios
+                .get("/retrieve-custom-q", { backend_url })
+                .then((res) => {
+                  console.log(res);
+                });
+            } catch (error) {
+              console.log(error);
+            }
+
+            if (!frontend_url) {
+              console.log(frontend_url);
+            }
+            // window.location.replace(frontend_url);
           }
         });
       if (data.error) {
@@ -86,6 +101,9 @@ const Cards = (props) => {
             console.log("is this an array", Array.isArray(res.data.clubName));
             let i = 0;
             let clubTitle = "";
+            if (res.data.clubName.length === 0) {
+              setOpen(true);
+            }
             // Go through the clubs array for this user. If the user is enrolled in teh club the card button represents, visit
             // If not, check for custom Q's and then update enrollment
             for (i = 0; i < res.data.clubName.length; i++) {
@@ -149,76 +167,6 @@ const Cards = (props) => {
       console.log(err);
     }
   };
-  /*
-  const joinClub = async (title) => {
-    //  e.preventDefault();
-    console.log("title props: ", props.title);
-    const cardTitle = props.title;
-    const redirect = props.redirect;
-    const redirect_b = props.redirect_b;
-    
-    try {
-      const call = await axios
-        .get("http://localhost:3001/isEnrolled")
-        .then(async (res) => {
-          console.log(res);
-          if (res.data.error) {
-            console.log(res.data.error);
-            console.log(res.data.clubName);
-            console.log("is this an array", Array.isArray(res.data.clubName));
-            let i = 0;
-            let clubTitle = "";
-            // Go through the clubs array for this user. If the user is enrolled in teh club the card button represents, visit
-            // If not, check for custom Q's and then update enrollment
-            for (i = 0; i < res.data.clubName.length; i++) {
-              clubTitle = res.data.clubName[i].clubName;
-              console.log(clubTitle);
-              console.log("type clubTitle: ", typeof clubTitle);
-              console.log("type cardTitle: ", typeof cardTitle);
-              console.log(
-                "Are they equal?: ",
-                clubTitle.toString() === cardTitle.toString()
-              );
-              console.log("cardTitle: ", cardTitle);
-              console.log("clubTitle: ", clubTitle);
-
-              if (clubTitle === cardTitle.toString()) {
-                console.log("title props: ", clubTitle);
-                console.log("title props: ", cardTitle);
-                window.location.replace(`${redirect}`);
-                setOpen(false);
-                // break;
-              } else {
-                setOpen(true);
-                console.log("Club Not Enrolled");
-                toast({ error: "Club Not Enrolled" });
-                // This is where we now ask for custom questions if any
-                // If there isn't then just borrow info from the other club
-
-                // const x = await axios.get(`${redirect}/retrieve-custom-q`);
-                try {
-                  const x = await axios
-                    .post("/retrieve-custom-q", { redirect_b }, true)
-                    .then((res) => {
-                      console.log("Connected:", res.data.stat);
-                      console.log("Will be redirected to:", res.data.r);
-                    });
-                } catch (err) {
-                  console.log(err);
-                }
-              }
-            }
-          } else if (!res.data.error) {
-            // setOpen(true);
-            // joinClub();
-            console.log(res.data.error);
-          }
-        });
-    } catch (err) {
-      console.log(err);
-    }
-    // Make an API call to retrieve if the user string "clubs" is popualted. If so, setOpen(false) == setOpen(!API Return)
-  };*/
   // Dynamic Component for Club Stats
   const stats = [
     {
@@ -231,22 +179,10 @@ const Cards = (props) => {
     <ClubStats clubName={stat.clubName} paidDues={stat.paidDues} />
   ));
 
-  const dues = async () => {
-    try {
-      const clubName = props.title;
-      console.log("ClubName", clubName);
-      const duesBool = await axios
-        .post("http://localhost:3001/check-dues", {
-          clubName,
-        })
-        .then((res) => {
-          console.log(res.data.error);
-          // setDues("true");
-        });
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const prevStat = stats.map((stat) => (
+    <ClubStats clubName={props.title} paidDues={Dues} />
+  ));
+  // <div>{stats.length === 0 ? <div></div> : <div>{prevStat}</div>}</div>
 
   return (
     <div className="card">
@@ -259,10 +195,11 @@ const Cards = (props) => {
           <div></div>
         ) : (
           <div>
-            <button onClick={dues}>Paid Dues Yet?</button>
-            {stats.map((stat) => (
-              <ClubStats clubName={props.title} paidDues={Dues} />
-            ))}
+            {
+              <div>
+                {stats.length === 0 ? <div></div> : <div>{prevStat}</div>}
+              </div>
+            }
           </div>
         )}
       </div>
@@ -346,6 +283,7 @@ const Cards = (props) => {
           </div>
         </div>
       </Model>
+      <CustomQForm backend_url={props.redirect_b} />
     </div>
   );
 };

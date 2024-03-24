@@ -37,6 +37,27 @@ nav {
   font-weight: 600;
   color: aliceblue;
 }
+.nav-bar li button {
+  text-decoration: none;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: rgb(255, 255, 255);
+  background-color: black;
+  border: 0;
+}
+.nav-bar li button:hover {
+  color: rgb(221, 192, 6);
+}
+
+.nav-bar li button:hover::after {
+  content: "";
+  width: 55%;
+  height: 2px;
+  background: rgb(221, 192, 6);
+  position: absolute;
+  bottom: -4px;
+  left: 20px;
+}
 
 .nav-bar li a:hover {
   color: rgb(221, 192, 6);
@@ -58,4 +79,8 @@ a.logo {
 
 .profile-img {
   max-height: 40px;
+}
+
+#logo {
+  height: 5vh;
 }

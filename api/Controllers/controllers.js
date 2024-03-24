@@ -11,6 +11,7 @@ const { Console } = require("console");
 const QRCode = require("qrcode");
 const { default: mongoose } = require("mongoose");
 const { hashPwd, comparePwd } = require("./helpers/auth.js");
+const cModel = require("../Models/controller-model.js");
 
 let _uid = 0;
 let qrlink = null;
@@ -99,18 +100,22 @@ const Logout = async (req, res) => {
 };
 
 const profile = (req, res) => {
-  const { token } = req.cookies;
-  console.log(token);
-  if (token) {
-    jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
-      if (err) {
-        throw err;
-      }
-      console.log("here");
-      res.json(user);
-    });
-  } else {
-    res.json(null);
+  try {
+    const { token } = req.cookies.access_token || req.cookies.refresh_token;
+    console.log(token);
+    if (token) {
+      jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+        if (err) {
+          throw err;
+        }
+        console.log("here");
+        res.json(user);
+      });
+    } else {
+      res.json(null);
+    }
+  } catch (err) {
+    console.log(err);
   }
 };
 
@@ -203,11 +208,11 @@ const discordOAuth = async (req, res) => {
             })
             .status(200);
 
-          const user1 = await U.findOneAndUpdate({
+          /*const user1 = await U.findOneAndUpdate({
             $push: {
               clubs: { clubName: "Test" },
             },
-          }).where(jwt.decode(accessToken)._id);
+          }).where(jwt.decode(accessToken)._id);*/
         } catch (error) {
           if (error.code == 11000) {
             console.log(error);
@@ -236,11 +241,11 @@ const discordOAuth = async (req, res) => {
           })
           .status(200);
 
-        const user1 = await U.findOneAndUpdate({
+        /*const user1 = await U.findOneAndUpdate({
           $push: {
             clubs: { clubName: "Test" },
           },
-        }).where(jwt.decode(accessToken)._id);
+        }).where(jwt.decode(accessToken)._id);*/
       }
     }
 
@@ -314,6 +319,14 @@ const discordOAuth = async (req, res) => {
 
   res.redirect(301, "http://localhost:3000/dashboard");
   //}
+};
+
+const logoutMain = async (req, res) => {
+  console.log(req.cookies.access_token);
+  console.log(req.cookies.refreshToken_token);
+  res.clearCookie("access_token");
+  res.clearCookie("refresh_token");
+  res.status(200).json({ error: true });
 };
 
 const qrGenerate = async (req, res) => {
@@ -426,7 +439,6 @@ const assignUID = async (req, res) => {
 const firstTimeQ = async (req, res) => {
   let count;
   const token = req.cookies.access_token;
-  // console.log("TOKEN IN FTQ:  ", token);
   const decodedToken = jwt.decode(token);
 
   // console.log("DECODED TOKEN IN FTQ:  ", decodedToken.UID);
@@ -434,14 +446,12 @@ const firstTimeQ = async (req, res) => {
   // store in data constant as this will be passed onto the cotnroller backend for data storage
   const data = req.body;
   console.log("DATA", data);
-  const { name, major, gradDate, clubName } = req.body;
-  /*console.log(name);
-  console.log(major);
-  console.log(gradDate);
-  console.log(clubName);*/
+  const { name, major, gradDate, clubTitle, redirect } = req.body;
+  console.log("REDIRECT URL: ", req.body.backend_url);
   try {
     const response = await axios.get(
-      "http://localhost:8000/one-time-signup-server",
+      // "http://localhost:8000/one-time-signup-server",
+      `${req.body.backend_url}/one-time-signup-server`,
       {
         params: {
           data: data,
@@ -449,7 +459,7 @@ const firstTimeQ = async (req, res) => {
           name: name,
           major: major,
           gradDate: gradDate,
-          clubName: clubName,
+          clubName: clubTitle,
         },
       }
     );
@@ -461,58 +471,14 @@ const firstTimeQ = async (req, res) => {
   }
 
   if (req.clubs == null) {
-    /*
-    for prior oauthmodel
-    const user = await oauthModel
-      .findOneAndUpdate({
-        discordId: decodedToken.discordId,
-        username: decodedToken.username,
-        avatar: decodedToken.avatar,
-        clubs: clubName,
-        UID: decodedToken.UID,
-        qrcode: null,
-      })
-      .where(decodedToken._id);
-*/
-    /*
-    const user = await U.findOneAndUpdate({
-      discordId: decodedToken.discordId,
-      username: decodedToken.username,
-      avatar: decodedToken.avatar,
-      clubs: clubName.clubName,
-      UID: decodedToken.UID,
-      qrcode: null,
-    }).where(decodedToken._id);*/
-
     const user = await U.findOneAndUpdate({
       $push: {
-        clubs: { clubName: "KnightHacks" },
+        clubs: { clubName: clubTitle },
       },
     }).where(decodedToken._id);
 
     console.log("USER ARRAY CLUB: ", user.clubs);
     console.log("USER ARRAY CLUB clubname: ", user.clubs.clubName);
-
-    /*res.clearCookie();
-    const accessToken = jwt.sign(user.toJSON(), process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
-    const refreshToken = jwt.sign(user.toJSON(), process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
-    res
-      .cookie("access_token", accessToken, {
-        httpOnly: true,
-        secure: true,
-      })
-      .status(200);
-    res
-      .cookie("refresh_token", refreshToken, {
-        httpOnly: true,
-      })
-      .status(200);
-
-    console.log("updated:  ", updatedData);*/
   }
 };
 
@@ -539,11 +505,7 @@ const authenticate = async (req, res, next) => {
 
 const isEnrolled = async (req, res, next) => {
   console.log("IS ENROLLED:  ", req.user.UID);
-  /*
-  const member = await oauthModel.findOne({
-    UID: req.user.UID,
-  });
-  */
+
   const member = await U.findOne({
     UID: req.user.UID,
   });
@@ -647,21 +609,203 @@ const checkDues = async (req, res, next) => {
 // Login Endpoint;endpoint connected to route in LoginOut.js
 
 const retrieveCQ = async (req, res) => {
-  const red_url = req.body.redirect_b;
-
+  const red_url = req.query.backend_url;
+  console.log("RED_URL: ", red_url);
+  let questionArrayFromController = [];
   try {
     const data = await axios
-      .get(`${red_url}/custom-questions`)
+      .get(`${red_url}/custom-questions`, {
+        params: req.query,
+      })
       // .get("http://localhost:8000/custom-questions")
       .then((res) => {
-        console.log(res.data.error);
-        console.log("HELLO");
+        console.log("ERROR FROM CONTROLLER CQ API:", res.data.customquestion);
+        questionArrayFromController = res.data.customquestion;
+        // res.json({res.data});
       });
+    console.log("CHECK BEFORE RES:", questionArrayFromController);
+    res.send(questionArrayFromController);
+  } catch (err) {
+    console.log(err);
+    res.json([{}]);
+  }
+  // res.json({ stat: "connected", r: red_url });
+};
+
+const addToClub = async (req, res) => {
+  // res.json({ test: true });
+  try {
+    console.log(req.body);
+    // const { name, frontend, backend, logo, text } = req.body.data;
+    const name = req.body.name;
+    const frontend = req.body.frontend;
+    const backend = req.body.backend;
+    const text = req.body.text;
+    const logo = req.body.logo;
+    console.log(name);
+    console.log(frontend);
+    console.log(backend);
+    console.log(text);
+    console.log(logo);
+
+    // three if statements check if form fields are entered
+    // toast picks up error body and displays as notification
+    if (!name) {
+      return res.json({
+        error: "Name is required",
+      });
+    }
+    if (!frontend) {
+      return res.json({
+        error: "frontend url is required",
+      });
+    }
+    if (!backend) {
+      return res.json({
+        error: "backend url is Required",
+      });
+    }
+    if (!logo) {
+      return res.json({
+        error: "img url is required",
+      });
+    }
+    if (!text) {
+      return res.json({
+        error: "club display text is required",
+      });
+    }
+
+    const exist = await cModel.findOne({ name });
+    if (exist) {
+      return res.json({
+        error: true,
+      });
+    }
+
+    // create a hashed password using hashPwd helper function
+    // const hashedPwd = await hashPwd(password);
+    //console.log("Addded");
+    // create user with req.body infromation
+    const club = cModel.create({
+      name,
+      frontend,
+      backend,
+      logo,
+      text,
+    });
+
+    (await club).save();
+
+    if (cModel.find()) {
+      console.log("Addded");
+    }
+    return res.json(club.name);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const findControllers = async (req, res) => {
+  try {
+    const clubs = await cModel.find();
+    if (clubs) {
+      // console.log("CLUBS: ", clubs);
+      res.json(clubs);
+    } else {
+      res.json({});
+    }
   } catch (err) {
     console.log(err);
   }
-  res.json({ stat: "connected", r: red_url });
 };
+
+const checkDuePayment = async (req, res) => {
+  let count;
+  const token = req.cookies.access_token;
+  // console.log("TOKEN IN FTQ:  ", token);
+  const decodedToken = jwt.decode(token);
+
+  // console.log("DECODED TOKEN IN FTQ:  ", decodedToken.UID);
+  // gather name, major, and grad date from request body coming from forntend axios.get
+  // store in data constant as this will be passed onto the cotnroller backend for data storage
+  const redirect = req.body.redirect_b;
+  console.log("DATA", redirect);
+  /*console.log(name);
+  console.log(major);
+  console.log(gradDate);
+  console.log(clubName);*/
+  try {
+    const response = await axios.get(
+      // "http://localhost:8000/one-time-signup-server",
+      `${redirect}/paid-dues-check`,
+      {
+        params: {
+          UID: decodedToken.UID,
+          TOKEN: token,
+        },
+      }
+    );
+    console.log("790:", response.data);
+    res.json({ paidDues: response.data });
+  } catch (error) {
+    console.error(error);
+    // res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+const sendAnswers = async (req, res) => {
+  // receive backend url to point to (determines which controller to forward)
+  const redirect = req.query.backend_url.toString();
+  // retrieve the array of questions with updated answers
+  const submit = req.query.questions;
+  let token = {};
+  try {
+    token = jwt.decode(req.cookies.access_token);
+  } catch (err) {
+    console.log(err);
+  }
+
+  console.log("DATA in SEND ANSWERS", redirect);
+  console.log("Answers received:", submit);
+  //send the array to the controller to push the aray onto member user document in customQ array field
+  try {
+    const response = await axios
+      .get(`${redirect}/update-answers`, {
+        // .get("http://localhost:8000/update-answers", {
+        params: {
+          submit,
+          token,
+        },
+      })
+      .then((res) => {
+        console.log("FROM CONTROLLER:", res);
+      });
+    // res.json({ paidDues: response.data });
+  } catch (error) {
+    console.error(error);
+    // res.status(500).json({ error: "Internal Server Error" });
+  }
+
+  /*
+  try {
+    const response = await axios.get(`${redirect}/update-answers`, {
+      params: {
+        UID: decodedToken.UID,
+        TOKEN: token,
+        submit,
+      },
+    });
+    console.log("819:", response.data);
+    res.json({ paidDues: response.data });
+  } catch (error) {
+    console.error(error);
+    // res.status(500).json({ error: "Internal Server Error" });
+  }*/
+
+  res.json({ msg: true });
+};
+
 module.exports = {
   test,
   firstTimeQ,
@@ -676,4 +820,9 @@ module.exports = {
   Logout,
   checkDues,
   retrieveCQ,
+  logoutMain,
+  addToClub,
+  findControllers,
+  checkDuePayment,
+  sendAnswers,
 };

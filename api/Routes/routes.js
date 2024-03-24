@@ -14,6 +14,11 @@ const {
   Logout,
   checkDues,
   retrieveCQ,
+  logoutMain,
+  addToClub,
+  findControllers,
+  checkDuePayment,
+  sendAnswers,
 } = require("../Controllers/controllers.js");
 router.use(
   cors({
@@ -22,9 +27,13 @@ router.use(
       "http://localhost:3000" ||
       "http://localhost:3001" ||
       "http://localhost:3002" ||
-      "http://localhost:8000",
+      "http://localhost:3003" ||
+      "http://localhost:8000" ||
+      "http://localhost:8001" ||
+      "http://localhost:8002",
   })
 );
+// router.options("*", cors());
 router.get("/", test);
 router.get("/api/auth/discord/dashboard", discordOAuth);
 router.post("/one-time-signup", authenticate, firstTimeQ);
@@ -36,7 +45,12 @@ router.post("/login", Login);
 router.get("/profile", profile);
 router.get("/logout", Logout);
 router.post("/check-dues", authenticate, checkDues);
-router.post("/retrieve-custom-q", authenticate, retrieveCQ);
+router.get("/retrieve-custom-q", authenticate, retrieveCQ);
+router.get("/logout/influx", logoutMain);
+router.post("/add-new-club", addToClub);
+router.get("/controllers", findControllers);
+router.post("/check-due-payment", checkDuePayment);
+router.get("/update-answers-send", sendAnswers);
 
 /*
 router.get("/posts", authenticateToken, (req, res) => {
