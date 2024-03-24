@@ -16,6 +16,7 @@ const Cards = (props) => {
   const navigate = useNavigate();
   const [Dues, setDues] = useState("no");
   const [open, setOpen] = useState(false);
+  const [openC, setOpenC] = useState(false);
   const [data, setData] = useState({
     name: "",
     major: "",
@@ -23,6 +24,7 @@ const Cards = (props) => {
     clubName: "",
   });
   const [payment, setPayment] = useState([{}]);
+  const [questions, setQuestions] = useState([{}]);
 
   const basicQ = async (e) => {
     const backend_url = props.redirect_b;
@@ -32,6 +34,7 @@ const Cards = (props) => {
     axios.defaults.withCredentials = true;
     e.preventDefault();
     const { name, major, gradDate, clubName } = data;
+    const clubTitle = props.title;
     try {
       const { data } = await axios
         .post(
@@ -40,7 +43,7 @@ const Cards = (props) => {
             name,
             major,
             gradDate,
-            clubName,
+            clubTitle,
             backend_url,
           },
           true
@@ -50,6 +53,7 @@ const Cards = (props) => {
             console.log("Already added");
             setOpen(false);
           } else {
+            fetchQuestions();
             // first time club's custom questions are checked here:
             try {
               const cQ = await axios
@@ -79,12 +83,28 @@ const Cards = (props) => {
 
     setOpen(false);
   };
+  const fetchQuestions = async () => {
+    try {
+      const backend_url = props.redirect_b;
+      // const backend_url = "http://localhost:8000";
+      const response = await axios.get("/retrieve-custom-q", {
+        params: { backend_url },
+      });
+      console.log(backend_url);
+      // setQuestions(response.data);
+      if (response.data.length > 0) {
+        setOpenC(true);
+      }
+    } catch (error) {
+      console.error("Error fetching questions:", error);
+    }
+  };
   const joinClub = async (req, res) => {
     const cardTitle = props.title;
     const redirect = props.redirect;
-    const redirect_b = props.redirect_b;
+    // const redirect_b = props.redirect_b;
 
-    console.log(cardTitle);
+    console.log("from props", cardTitle);
 
     if (req) {
       console.log("REQUEST", req);
@@ -123,6 +143,12 @@ const Cards = (props) => {
                 console.log("title props: ", cardTitle);
                 window.location.replace(`${redirect}`);
                 setOpen(false);
+
+                try {
+                  fetchQuestions();
+                } catch (err) {
+                  console.log(err);
+                }
                 // break;
               } else {
                 // setOpen(true);
@@ -130,17 +156,9 @@ const Cards = (props) => {
                 toast({ error: "Club Not Enrolled" });
                 // This is where we now ask for custom questions if any
                 // If there isn't then just borrow info from the other club
-
-                try {
-                  const x = await axios
-                    .post("/retrieve-custom-q", { redirect_b }, true)
-                    .then((res) => {
-                      console.log("Connected:", res.data.stat);
-                      console.log("Will be redirected to:", res.data.r);
-                    });
-                } catch (err) {
-                  console.log(err);
-                }
+                // first borrow questiosn from the mains erver user clubs[0] info object
+                // then send custom questions to main server
+                // then redirect
               }
             }
           } else {
@@ -283,7 +301,9 @@ const Cards = (props) => {
           </div>
         </div>
       </Model>
-      <CustomQForm backend_url={props.redirect_b} />
+      <div>
+        {openC ? <CustomQForm backend_url={props.redirect_b} /> : <></>}
+      </div>
     </div>
   );
 };

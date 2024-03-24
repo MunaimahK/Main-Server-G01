@@ -183,7 +183,6 @@ const discordOAuth = async (req, res) => {
         discordId: userResponse.id,
         username: userResponse.username,
         avatar: userResponse.avatar,
-        clubs: [],
         UID: uuid.v4(),
         qrcode: null,
       });
@@ -446,8 +445,10 @@ const firstTimeQ = async (req, res) => {
   // store in data constant as this will be passed onto the cotnroller backend for data storage
   const data = req.body;
   console.log("DATA", data);
-  const { name, major, gradDate, clubTitle, redirect } = req.body;
+  const { name, major, gradDate, clubtitle, redirect } = req.body;
+  const clubTitle = req.body.clubTitle;
   console.log("REDIRECT URL: ", req.body.backend_url);
+  console.log("clubTitle: ", clubTitle);
   try {
     const response = await axios.get(
       // "http://localhost:8000/one-time-signup-server",

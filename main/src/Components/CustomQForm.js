@@ -12,8 +12,8 @@ const CustomQForm = (props) => {
   const [open, setOpen] = useState(true);
 
   useEffect(() => {
-    // const backend_url = props.backend_url;
-    const backend_url = "http://localhost:8000";
+    const backend_url = props.backend_url;
+    // const backend_url = "http://localhost:8000";
     const fetchQuestions = async () => {
       try {
         const response = await axios.get("/retrieve-custom-q", {
@@ -88,7 +88,7 @@ const CustomQForm = (props) => {
               <br />
             </div>
           ))}
-          <button id="sub" type="submit">
+          <button id="sub" type="submit" onClick={() => setOpen(false)}>
             Submit
           </button>
         </form>{" "}

@@ -5,7 +5,10 @@ const UserOAuth = mongoose.Schema(
     UID: String,
     username: { type: String, unique: true },
     avatar: { type: String, unique: true },
-    clubs: [{ clubName: String }],
+    clubs: {
+      type: [{ clubName: String }],
+      default: [], // Initialize with an empty array
+    },
     qrcode: String,
   },
   {
