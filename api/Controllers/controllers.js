@@ -448,6 +448,8 @@ const firstTimeQ = async (req, res) => {
   const { name, major, gradDate, clubtitle, redirect } = req.body;
   const clubTitle = req.body.clubTitle;
   console.log("REDIRECT URL: ", req.body.backend_url);
+  const frontend_url = req.body.frontend_url;
+  const backend_url = req.body.backend_url;
   console.log("clubTitle: ", clubTitle);
   try {
     const response = await axios.get(
@@ -474,7 +476,11 @@ const firstTimeQ = async (req, res) => {
   if (req.clubs == null) {
     const user = await U.findOneAndUpdate({
       $push: {
-        clubs: { clubName: clubTitle },
+        clubs: {
+          clubName: clubTitle,
+          redirect: frontend_url,
+          redirect_b: backend_url,
+        },
       },
     }).where(decodedToken._id);
 
@@ -628,7 +634,7 @@ const retrieveCQ = async (req, res) => {
     res.send(questionArrayFromController);
   } catch (err) {
     console.log(err);
-    res.json([{}]);
+    // res.json([{}]);
   }
   // res.json({ stat: "connected", r: red_url });
 };
@@ -807,6 +813,65 @@ const sendAnswers = async (req, res) => {
   res.json({ msg: true });
 };
 
+const borrowGeneral = async (req, res) => {
+  console.log("borrow");
+  const borrowFrom = req.query.borrowFrom;
+  const isBorrowing = req.query.isBorrowing;
+  console.log(borrowFrom, isBorrowing);
+  const UID = jwt.decode(req.cookies.access_token).UID;
+  const id = jwt.decode(req.cookies.access_token)._id;
+  // first retrieve user from borrowFrom db
+  try {
+    const borrowingUserfromClub = await axios
+      .get(`${borrowFrom}/lend-user`, {
+        params: { UID, id },
+      })
+      .then(async (res) => {
+        console.log("IN BORROW GENERAL FROM LEND:", res.data.msg);
+        const name = res.data.msg.name;
+        const major = res.data.msg.major;
+        const gradDate = res.data.msg.gradDate;
+        const clubName = res.data.msg.clubName;
+
+        const send = await axios
+          .get(`${isBorrowing}/take-general`, {
+            params: { name, major, gradDate, clubName, UID, id },
+          })
+          .then((res) => {
+            console.log(res.data.msg);
+          });
+      });
+  } catch (err) {
+    console.log(err);
+  }
+  res.json({ msg: true });
+};
+const updateCArray = async (req, res) => {
+  const decode = jwt.decode(req.cookies.access_token);
+  try {
+    const newClub = req.query.newC;
+    const frontend_url = req.query.frontend_url;
+    const backend_url = req.query.backend_url;
+
+    console.log(newClub, frontend_url, backend_url);
+
+    const updatedClubs = await U.findOneAndUpdate({
+      $push: {
+        clubs: {
+          clubName: newClub,
+          redirect: frontend_url,
+          redirect_b: backend_url,
+        },
+      },
+    }).where(decode._id);
+
+    console.log(updatedClubs);
+  } catch (err) {
+    console.log(err);
+  }
+  console.log("IN C[]");
+  res.json({ msg: "true in updatecAR" });
+};
 module.exports = {
   test,
   firstTimeQ,
@@ -826,4 +891,6 @@ module.exports = {
   findControllers,
   checkDuePayment,
   sendAnswers,
+  borrowGeneral,
+  updateCArray,
 };

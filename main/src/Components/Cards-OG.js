@@ -17,7 +17,6 @@ const Cards = (props) => {
   const [Dues, setDues] = useState("no");
   const [open, setOpen] = useState(false);
   const [openC, setOpenC] = useState(false);
-  const [openC2, setOpenC2] = useState(false);
   const [data, setData] = useState({
     name: "",
     major: "",
@@ -26,19 +25,7 @@ const Cards = (props) => {
   });
   const [payment, setPayment] = useState([{}]);
   const [questions, setQuestions] = useState([{}]);
-  const backend_url = props.redirect_b;
-  // const backend_url = "http://localhost:8000";
-  const fetchQuestions = async () => {
-    try {
-      const response = await axios.get("/retrieve-custom-q", {
-        params: { backend_url },
-      });
-      setQuestions(response.data);
-      setOpenC(true);
-    } catch (error) {
-      console.error("Error fetching questions:", error);
-    }
-  };
+
   const basicQ = async (e) => {
     const backend_url = props.redirect_b;
     const frontend_url = props.redirect;
@@ -58,7 +45,6 @@ const Cards = (props) => {
             gradDate,
             clubTitle,
             backend_url,
-            frontend_url,
           },
           true
         )
@@ -96,14 +82,27 @@ const Cards = (props) => {
       console.log(error);
     }
 
+    // setOpenC(true);
     setOpen(false);
-    setOpenC(true);
   };
-
+  const fetchQuestions = async () => {
+    try {
+      const backend_url = props.redirect_b;
+      // const backend_url = "http://localhost:8000";
+      const response = await axios.get("/retrieve-custom-q", {
+        params: { backend_url },
+      });
+      console.log(backend_url);
+      // setQuestions(response.data);
+      if (response.data.length > 0) {
+        setOpenC(true);
+      }
+    } catch (error) {
+      console.error("Error fetching questions:", error);
+    }
+  };
   const joinClub = async (req, res) => {
     // setOpenC(true);
-    const backend_url = props.redirect_b;
-    const frontend_url = props.redirect;
     const cardTitle = props.title;
     const redirect = props.redirect;
     // const redirect_b = props.redirect_b;
@@ -157,41 +156,14 @@ const Cards = (props) => {
 
                 // break;
               } else {
-                // let's borrow from the first club in the array:
-                const borrowFrom = res.data.clubName[0].redirect_b;
-                const isBorrowing = props.redirect_b;
-                const newC = props.title;
-                const borrow = await axios
-                  .get("/borrow-general-questions", {
-                    params: { borrowFrom, isBorrowing },
-                  })
-                  .then(async (res) => {
-                    console.log("BORRW:", res);
-                    // update main user's clubs []
-                    try {
-                      const update = await axios
-                        .get("/update-clubs-enrolled", {
-                          params: { newC, frontend_url, backend_url },
-                        })
-                        .then((res) => {
-                          console.log(res.data.msg);
-                        });
-                    } catch (err) {
-                      console.log(err);
-                    }
-                  });
-
                 try {
                   fetchQuestions();
                 } catch (err) {
                   console.log(err);
                 }
                 // setOpen(true);
-                setOpenC2(true);
                 console.log("Club Not Enrolled");
-                // toast({ error: "Club Not Enrolled" });
-
-                // fetchQuestions();
+                toast({ error: "Club Not Enrolled" });
                 // This is where we now ask for custom questions if any
                 // If there isn't then just borrow info from the other club
                 // first borrow questiosn from the mains erver user clubs[0] info object
@@ -200,7 +172,20 @@ const Cards = (props) => {
               }
             }
           } else {
+            //if (true) {
             setOpen(true);
+            /*} else {
+              try {
+                const x = await axios
+                  .post("/retrieve-custom-q", { redirect_b }, true)
+                  .then((res) => {
+                    console.log("Connected:", res.data.stat);
+                    console.log("Will be redirected to:", res.data.r);
+                  });
+              } catch (err) {
+                console.log(err);
+              }
+            }*/
 
             // joinClub();
             console.log(res.data.error);
@@ -226,19 +211,8 @@ const Cards = (props) => {
     <ClubStats clubName={props.title} paidDues={Dues} />
   ));
   // <div>{stats.length === 0 ? <div></div> : <div>{prevStat}</div>}</div>
-  //const [questions, setQuestions] = useState([{}]);
-  const [data2, setData2] = useState({
-    submit: "",
-  });
-  // const [open, setOpen] = useState(true);
-
-  useEffect(() => {
-    fetchQuestions();
-  }, []);
-
   const submitQ = async (e) => {
-    const backend_url = props.redirect_b;
-    // const backend_url = "http://localhost:8000";
+    const backend_url = props.redirect_b; //localhost:8000";
     axios.defaults.withCredentials = true;
     //  const answers = data;
     e.preventDefault();
@@ -258,13 +232,6 @@ const Cards = (props) => {
     } catch (err) {
       console.log(err);
     }
-    setOpenC(false);
-  };
-
-  const handleInputChange = (index, value) => {
-    const updatedQuestions = [...questions];
-    updatedQuestions[index].answer = value;
-    setQuestions(updatedQuestions);
   };
   return (
     <div className="card">
@@ -359,44 +326,16 @@ const Cards = (props) => {
 
               <div className="btn-container">
                 <button className="reg-btn" type="submit">
-                  Let's go!
+                  Join Club!
                 </button>
               </div>
             </form>
-
-            {openC ? (
-              <div>
-                <div className="btn-container">
-                  <button id="close" onClick={() => setOpenC(false)}>
-                    X
-                  </button>
-                </div>
-
-                {questions.map((question, index) => (
-                  <div className="e1" key={index}>
-                    <label htmlFor={`question.id-${index}`} id="l">
-                      {question.question}
-                    </label>
-
-                    <input
-                      type="text"
-                      id={`question.id-${index}`}
-                      value={question.answer}
-                      onChange={(e) => handleInputChange(index, e.target.value)}
-                    ></input>
-
-                    <br />
-                  </div>
-                ))}
-                <button id="sub" onClick={submitQ}>
-                  Submit
-                </button>
-              </div>
-            ) : (
-              <></>
-            )}
           </div>
         </div>
+        <form onSubmit={submitQ}>
+          {openC && <CustomQForm backend_url={props.redirect_b} />}
+          <button type="submit">SUBMIT</button>
+        </form>
       </Model>
     </div>
   );

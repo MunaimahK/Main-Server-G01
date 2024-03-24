@@ -6,7 +6,13 @@ const UserOAuth = mongoose.Schema(
     username: { type: String, unique: true },
     avatar: { type: String, unique: true },
     clubs: {
-      type: [{ clubName: String }],
+      type: [
+        {
+          clubName: String,
+          redirect: { type: String, default: "" },
+          redirect_b: { type: String, default: "" },
+        },
+      ],
       default: [], // Initialize with an empty array
     },
     qrcode: String,

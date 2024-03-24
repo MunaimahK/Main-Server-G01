@@ -19,6 +19,8 @@ const {
   findControllers,
   checkDuePayment,
   sendAnswers,
+  borrowGeneral,
+  updateCArray,
 } = require("../Controllers/controllers.js");
 router.use(
   cors({
@@ -51,6 +53,8 @@ router.post("/add-new-club", addToClub);
 router.get("/controllers", findControllers);
 router.post("/check-due-payment", checkDuePayment);
 router.get("/update-answers-send", sendAnswers);
+router.get("/borrow-general-questions", borrowGeneral);
+router.get("/update-clubs-enrolled", updateCArray);
 
 /*
 router.get("/posts", authenticateToken, (req, res) => {
