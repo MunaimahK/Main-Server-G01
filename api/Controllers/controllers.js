@@ -12,6 +12,7 @@ const QRCode = require("qrcode");
 const { default: mongoose } = require("mongoose");
 const { hashPwd, comparePwd } = require("./helpers/auth.js");
 const cModel = require("../Models/controller-model.js");
+const { stat } = require("fs");
 
 let _uid = 0;
 let qrlink = null;
@@ -436,6 +437,15 @@ const assignUID = async (req, res) => {
 
 // medium API communicating between Influx frontend and Controller backend
 const firstTimeQ = async (req, res) => {
+  // these are the general questions:
+  // First Name
+  // Surname
+  // Preferred Email
+  // NID
+  // Gender
+  // Major
+  // Class Standing (by credit hours)
+
   let count;
   const token = req.cookies.access_token;
   const decodedToken = jwt.decode(token);
@@ -443,6 +453,69 @@ const firstTimeQ = async (req, res) => {
   // console.log("DECODED TOKEN IN FTQ:  ", decodedToken.UID);
   // gather name, major, and grad date from request body coming from forntend axios.get
   // store in data constant as this will be passed onto the cotnroller backend for data storage
+  /*  f_name,
+  surname,
+  email,
+  NID,
+  Gender,
+  major,
+  classStanding,
+  backend_url,
+  frontend_url, */
+
+  const {
+    f_name,
+    surname,
+    email,
+    NID,
+    Gender,
+    major,
+    classStanding,
+    clubTitle,
+  } = req.body;
+  const frontend_url = req.body.frontend_url;
+  const backend_url = req.body.backend_url;
+
+  try {
+    const response = await axios.get(
+      // "http://localhost:8000/one-time-signup-server",
+      `${req.body.backend_url}/one-time-signup-server`,
+      {
+        params: {
+          UID: decodedToken.UID,
+          f_name,
+          surname,
+          email,
+          NID,
+          Gender,
+          major,
+          classStanding,
+        },
+      }
+    );
+
+    if (req.clubs == null) {
+      const user = await U.findOneAndUpdate({
+        $push: {
+          clubs: {
+            clubName: clubTitle,
+            redirect: frontend_url,
+            redirect_b: backend_url,
+          },
+        },
+      }).where(decodedToken._id);
+
+      console.log("USER ARRAY CLUB: ", user.clubs);
+      console.log("USER ARRAY CLUB clubname: ", user.clubs.clubName);
+      res.json(response.data);
+      console.log(response.data);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+
+  /*
   const data = req.body;
   console.log("DATA", data);
   const { name, major, gradDate, clubtitle, redirect } = req.body;
@@ -486,7 +559,7 @@ const firstTimeQ = async (req, res) => {
 
     console.log("USER ARRAY CLUB: ", user.clubs);
     console.log("USER ARRAY CLUB clubname: ", user.clubs.clubName);
-  }
+  }*/
 };
 
 const authenticate = async (req, res, next) => {
@@ -779,7 +852,6 @@ const sendAnswers = async (req, res) => {
   try {
     const response = await axios
       .get(`${redirect}/update-answers`, {
-        // .get("http://localhost:8000/update-answers", {
         params: {
           submit,
           token,
@@ -788,27 +860,9 @@ const sendAnswers = async (req, res) => {
       .then((res) => {
         console.log("FROM CONTROLLER:", res);
       });
-    // res.json({ paidDues: response.data });
   } catch (error) {
     console.error(error);
-    // res.status(500).json({ error: "Internal Server Error" });
   }
-
-  /*
-  try {
-    const response = await axios.get(`${redirect}/update-answers`, {
-      params: {
-        UID: decodedToken.UID,
-        TOKEN: token,
-        submit,
-      },
-    });
-    console.log("819:", response.data);
-    res.json({ paidDues: response.data });
-  } catch (error) {
-    console.error(error);
-    // res.status(500).json({ error: "Internal Server Error" });
-  }*/
 
   res.json({ msg: true });
 };
@@ -828,14 +882,37 @@ const borrowGeneral = async (req, res) => {
       })
       .then(async (res) => {
         console.log("IN BORROW GENERAL FROM LEND:", res.data.msg);
-        const name = res.data.msg.name;
+        const f_name = res.data.msg.f_name;
+        const surname = res.data.msg.surname;
+        const email = res.data.msg.email;
+        const NID = res.data.msg.NID;
+        const Gender = res.data.msg.Gender;
         const major = res.data.msg.major;
-        const gradDate = res.data.msg.gradDate;
-        const clubName = res.data.msg.clubName;
+        const classStanding = res.data.msg.classStanding;
+        console.log(
+          "IN BORROW GENERAL FROM LEN TEST:",
+          f_name,
+          surname,
+          email,
+          NID,
+          Gender,
+          major,
+          classStanding
+        );
 
         const send = await axios
           .get(`${isBorrowing}/take-general`, {
-            params: { name, major, gradDate, clubName, UID, id },
+            params: {
+              f_name,
+              surname,
+              email,
+              NID,
+              Gender,
+              major,
+              classStanding,
+              UID,
+              id,
+            },
           })
           .then((res) => {
             console.log(res.data.msg);
@@ -872,6 +949,26 @@ const updateCArray = async (req, res) => {
   console.log("IN C[]");
   res.json({ msg: "true in updatecAR" });
 };
+
+const checkDuesForStats = async (req, res) => {
+  const redirect_b = req;
+  let status = false;
+  const token = req.cookies.access_token;
+  // console.log("TOKEN IN FTQ:  ", token);
+  const decodedToken = jwt.decode(token);
+  console.log("url IN CHECK DUES FOR STATS:", req.query.b_url);
+  try {
+    const borrowingUserfromClub = await axios
+      .get(`${req.query.b_url}/paid-dues-check`, { params: { token } })
+      .then(async (res) => {
+        console.log("RES IN CHECK DUES FOR STATS:", res.data);
+        status = res.data.paidDues;
+      });
+    res.json({ msg: status });
+  } catch (err) {
+    console.log(err);
+  }
+};
 module.exports = {
   test,
   firstTimeQ,
@@ -893,4 +990,5 @@ module.exports = {
   sendAnswers,
   borrowGeneral,
   updateCArray,
+  checkDuesForStats,
 };

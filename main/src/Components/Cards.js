@@ -14,15 +14,33 @@ import CustomQForm from "./CustomQForm";
 
 const Cards = (props) => {
   const navigate = useNavigate();
-  const [Dues, setDues] = useState("no");
+  const [Dues, setDues] = useState("No");
   const [open, setOpen] = useState(false);
-  const [openC, setOpenC] = useState(false);
+  const [openC, setOpenC] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
   const [openC2, setOpenC2] = useState(false);
-  const [data, setData] = useState({
+  // these are the general questions:
+  // First Name
+  // Surname
+  // Preferred Email
+  // NID
+  // Gender
+  // Major
+  // Class Standing (by credit hours)
+  /* const [data, setData] = useState({
     name: "",
     major: "",
     gradDate: "",
     clubName: "",
+  });*/
+  const [data, setData] = useState({
+    f_name: "",
+    surname: "",
+    email: "",
+    NID: "",
+    gender: "",
+    major: "",
+    classStanding: "",
   });
   const [payment, setPayment] = useState([{}]);
   const [questions, setQuestions] = useState([{}]);
@@ -30,11 +48,16 @@ const Cards = (props) => {
   // const backend_url = "http://localhost:8000";
   const fetchQuestions = async () => {
     try {
-      const response = await axios.get("/retrieve-custom-q", {
-        params: { backend_url },
-      });
-      setQuestions(response.data);
-      setOpenC(true);
+      const response = await axios
+        .get("/retrieve-custom-q", {
+          params: { backend_url },
+        })
+        .then((res) => {
+          console.log("Retrieved C Questions:", res);
+          setQuestions(res.data);
+          setOpenC(true);
+          setOpenC2(true);
+        });
     } catch (error) {
       console.error("Error fetching questions:", error);
     }
@@ -46,19 +69,31 @@ const Cards = (props) => {
     console.log("FRONTED URL: ", frontend_url);
     axios.defaults.withCredentials = true;
     e.preventDefault();
-    const { name, major, gradDate, clubName } = data;
+    // const { name, major, gradDate, clubName } = data;
+    const { f_name, surname, email, NID, Gender, major, classStanding } = data;
     const clubTitle = props.title;
     try {
       const { data } = await axios
         .post(
           "http://localhost:3001/one-time-signup",
           {
+            /*
             name,
             major,
             gradDate,
             clubTitle,
             backend_url,
+            frontend_url,*/
+            f_name,
+            surname,
+            email,
+            NID,
+            Gender,
+            major,
+            classStanding,
+            backend_url,
             frontend_url,
+            clubTitle,
           },
           true
         )
@@ -101,7 +136,8 @@ const Cards = (props) => {
   };
 
   const joinClub = async (req, res) => {
-    // setOpenC(true);
+    setOpen(true);
+    setOpenC(true);
     const backend_url = props.redirect_b;
     const frontend_url = props.redirect;
     const cardTitle = props.title;
@@ -157,6 +193,7 @@ const Cards = (props) => {
 
                 // break;
               } else {
+                setOpen(false);
                 // let's borrow from the first club in the array:
                 const borrowFrom = res.data.clubName[0].redirect_b;
                 const isBorrowing = props.redirect_b;
@@ -175,6 +212,7 @@ const Cards = (props) => {
                         })
                         .then((res) => {
                           console.log(res.data.msg);
+                          fetchQuestions();
                         });
                     } catch (err) {
                       console.log(err);
@@ -187,7 +225,7 @@ const Cards = (props) => {
                   console.log(err);
                 }
                 // setOpen(true);
-                setOpenC2(true);
+                // setOpenC2(true);
                 console.log("Club Not Enrolled");
                 // toast({ error: "Club Not Enrolled" });
 
@@ -231,12 +269,40 @@ const Cards = (props) => {
     submit: "",
   });
   // const [open, setOpen] = useState(true);
+  const checkStats = () => {
+    const b_url = props.redirect_b;
+    axios
+      .get("/check-stats-per-club", { params: { b_url } })
+      .then((response) => {
+        console.log("RES IN STATS:", response);
+        //const updatedDues = { ...Dues };
+        // updatedDues[b_url] = response.data.msg ? "Yes" : "No";
+        setDues(response.data.msg.toString());
+        /*if (response.data.msg) {
+          console.log("RES IN STATS:", response);
+          if (response.data.msg === true) {
+            setDues("Yes");
+          } else {
+            setDues("No");
+          }
+        }*/
+      })
+      .catch((error) => {
+        console.error("Error fetching documents:", error);
+      });
+  };
 
   useEffect(() => {
     fetchQuestions();
   }, []);
 
+  useEffect(() => {
+    checkStats();
+  }, [props.redirect_b]);
+
   const submitQ = async (e) => {
+    setOpen(false);
+    setOpenC(false);
     const backend_url = props.redirect_b;
     // const backend_url = "http://localhost:8000";
     axios.defaults.withCredentials = true;
@@ -258,7 +324,7 @@ const Cards = (props) => {
     } catch (err) {
       console.log(err);
     }
-    setOpenC(false);
+    // setOpenC(false);
   };
 
   const handleInputChange = (index, value) => {
@@ -304,17 +370,68 @@ const Cards = (props) => {
             <form onSubmit={basicQ}>
               <div className="Container-Form-Content">
                 <div className="e1">
-                  <label id="l">Name</label>
+                  <label id="l">First Name</label>
                   <br></br>
                   <input
                     id="n"
                     type="text"
-                    placeholder="Hey! What's your name?"
-                    value={data.name || ""}
-                    onChange={(e) => setData({ ...data, name: e.target.value })}
+                    placeholder="Hey! What's your first name?"
+                    value={data.f_name || ""}
+                    onChange={(e) =>
+                      setData({ ...data, f_name: e.target.value })
+                    }
                   ></input>
                 </div>
-
+                <div className="e1">
+                  <label id="l">Surname</label>
+                  <br></br>
+                  <input
+                    id="n"
+                    type="text"
+                    placeholder="Surname?"
+                    value={data.surname || ""}
+                    onChange={(e) =>
+                      setData({ ...data, surname: e.target.value })
+                    }
+                  ></input>
+                </div>
+                <div className="e1">
+                  <label id="l">Email</label>
+                  <br></br>
+                  <input
+                    id="n"
+                    type="text"
+                    placeholder="Hey! What's your preferred email?"
+                    value={data.email || ""}
+                    onChange={(e) =>
+                      setData({ ...data, email: e.target.value })
+                    }
+                  ></input>
+                </div>
+                <div className="e1">
+                  <label id="l">NID</label>
+                  <br></br>
+                  <input
+                    id="n"
+                    type="text"
+                    placeholder="Alphanumeric NID"
+                    value={data.NID || ""}
+                    onChange={(e) => setData({ ...data, NID: e.target.value })}
+                  ></input>
+                </div>
+                <div className="e1">
+                  <label id="l">Gender</label>
+                  <br></br>
+                  <input
+                    id="n"
+                    type="text"
+                    placeholder="gender?"
+                    value={data.gender || ""}
+                    onChange={(e) =>
+                      setData({ ...data, gender: e.target.value })
+                    }
+                  ></input>
+                </div>
                 <div className="e1">
                   <label id="l">Major</label>
                   <br></br>
@@ -330,36 +447,27 @@ const Cards = (props) => {
                 </div>
 
                 <div className="e1">
-                  <label id="l">Graduation Date</label>
+                  <label id="l">Class Standing</label>
                   <br></br>
                   <input
                     id="n"
                     type="text"
-                    placeholder="When do you graduate?"
-                    value={data.gradDate || ""}
+                    placeholder="How many cedits have you taken?"
+                    value={data.classStanding || ""}
                     onChange={(e) =>
-                      setData({ ...data, gradDate: e.target.value })
-                    }
-                  ></input>
-                </div>
-                <div className="e1">
-                  <label id="l">Club Name</label>
-                  <br></br>
-                  <input
-                    id="n"
-                    type="text"
-                    placeholder="Which club would you like to sign up for?"
-                    value={data.clubName || ""}
-                    onChange={(e) =>
-                      setData({ ...data, clubName: e.target.value })
+                      setData({ ...data, classStanding: e.target.value })
                     }
                   ></input>
                 </div>
               </div>
 
               <div className="btn-container">
-                <button className="reg-btn" type="submit">
-                  Let's go!
+                <button
+                  className="reg-btn"
+                  type="submit"
+                  onClick={() => setOpenC(true)}
+                >
+                  Continue!
                 </button>
               </div>
             </form>
