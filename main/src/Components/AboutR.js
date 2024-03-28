@@ -1,5 +1,5 @@
 import React from "react";
-import "./FrontPage.css";
+import "./AboutR.css";
 import "boxicons";
 import { useState } from "react";
 // import {icon} from '../Components/assets/7341.jpg'
@@ -12,26 +12,25 @@ import { useState } from "react";
             <a href="/linkedin">
               <box-icon class="icon" name="linkedin" type="logo"></box-icon>
             </a> */
-const FrontPage = () => {
-  const [activeLink, setActiveLink] = useState("Home");
+const AboutR = () => {
+  const [activeLink, setActiveLink] = useState("About");
 
   const handleLinkClick = (link) => {
     setActiveLink(link);
   };
   return (
-    <div class="main-pg">
+    <div class="main-pg-about">
       <header class="header">
         <a href="/influx" class="logo">
           Influx
         </a>
         <nav className="navbar">
           <a
-            data-tooltip="Just a quick run through Discord OAuth, and then you can join clubs"
-            href="https://discord.com/api/oauth2/authorize?client_id=1206671973191516211&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2Fapi%2Fauth%2Fdiscord%2Fdashboard&scope=identify+email"
-            className={activeLink === "OAUTH" ? "active" : "avatar"}
-            onClick={() => handleLinkClick("OAUTH")}
+            href="/influx"
+            className={activeLink === "Home" ? "active" : ""}
+            onClick={() => handleLinkClick("Home")}
           >
-            Let's Go
+            Home
           </a>
           <a
             href="/about/us/influx/senior/deign/24"
@@ -49,19 +48,30 @@ const FrontPage = () => {
           </a>
         </nav>
       </header>
-      <section class="home">
-        <div class="home-content">
-          <h3> Hey, Welcome to</h3>
-          <div className="typed-out">
-            <h1> Influx </h1>
-          </div>
+      <section class="home-about">
+        <div class="home-content-about">
+          <h3>What does Influx Do?</h3>
+          <p>
+            Influx is a true one-stop shop for registered student organizations
+            at UCF. Influx strives to create a seamless dashboard and flow for
+            students (both members and admins) to use for various organizations
+            at UCF. <br></br>
+            <span>
+              {" "}
+              <br></br>
+            </span>
+            Influx’s aim is to simplify the process for students to join and
+            engage with registered student organizations at UCF. There are many
+            challenges faced by both students and organizations when using
+            KnightConnect such as the cumbersome nature of it and lack of a
+            centralized platform.
+          </p>
+          <h3> Who We Are</h3>
 
-          <h3>
-            {" "}
-            Connect to <span class="type">UCF RSOs and Clubs</span>
-          </h3>
-
-          <p>The one stop UCF community networking platform</p>
+          <p>
+            Senior Design G01: Influx Team's robust and modern solution to
+            seamless club enrollment. Sponsored by Hack@UCF lead.
+          </p>
           <div class="socials">
             <a href="/insta">
               <box-icon class="insta" name="instagram" type="logo"></box-icon>
@@ -74,10 +84,9 @@ const FrontPage = () => {
             </a>
           </div>
         </div>
-        <div className="home-img"></div>
       </section>
     </div>
   );
 };
 
-export default FrontPage;
+export default AboutR;

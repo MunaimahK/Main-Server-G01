@@ -18,6 +18,8 @@ import FAQ from "./Components/FAQ.js";
 import AddClub from "./Components/AddClub.js";
 import RenderControllers from "./Components/RenderControllers.js";
 import FrontPage from "./Components/FrontPage.js";
+import AboutR from "./Components/AboutR.js";
+import FAQR from "./Components/FAQR.js";
 
 // Knight Hacks img 1 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIHZlnuvnNWPsSs-9iltSdMx3fEjByztOWDgsNdVLPlDZjTUMyuRwRonlvENldynzVEzA&usqp=CAU"
 // Knight Hacks img 2 = https://avatars.githubusercontent.com/u/11686531?s=200&v=4
@@ -27,7 +29,16 @@ function App() {
   return (
     <UserContextProvider>
       <Routes>
-      <Route path="/influx" element={<FrontPage />}></Route>
+        <Route path="/influx" element={<FrontPage />}></Route>
+        <Route
+          path="/about/us/influx/senior/deign/24"
+          element={<AboutR />}
+        ></Route>
+        <Route
+          path="/influx/senior/deign/24/frequently-asked"
+          element={<FAQR />}
+        ></Route>
+
         <Route path="/" element={<Login />}></Route>
         <Route path="/admin" element={<Admin />}></Route>
         <Route path="/admin/login" element={<AdminLogin />}></Route>
