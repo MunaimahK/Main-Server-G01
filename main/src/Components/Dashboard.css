@@ -1,4 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap");
+
+/*
 body {
   background-color: aliceblue;
 }
@@ -17,7 +19,7 @@ nav {
   background: black;
   padding: 20px 80px;
   box-shadow: 0 5px 15xp rgba(0, 0, 0, 0.06);
-}
+}*/
 
 .nav-bar {
   display: flex;

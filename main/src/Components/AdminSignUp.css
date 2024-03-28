@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap");
-
+/*
 * {
   margin: 0;
   padding: 0;
@@ -14,14 +14,14 @@
 }
 
 body#sign-up {
-  /*
+  
   background-image: url("../BGGradient.png");
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-  background-attachment: fixed;*/
+  background-attachment: fixed;
   background: radial-gradient(ellipse at bottom, rgb(27, 46, 90), rgb(0, 0, 0));
-}
+}*/
 
 a {
   text-decoration: none;
