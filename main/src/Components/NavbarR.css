@@ -1,0 +1,64 @@
+:root {
+    --darkest: rgb(19, 30, 37);
+    --middle: #1f4287;
+    --light: #278ea5;
+    --accent: #21e6c1;
+    --white: rgb(255, 255, 255);
+    --orangelight:rgb(255, 163, 77) ;
+    --orangedeep:rgb(255, 124, 0);
+  }
+  
+  .header-dashboard {
+    position: fixed;
+    width: 98%;
+    padding: 20px;
+    background: var(--darkest);
+    height: 40px;
+  }
+  .header-dashboard svg {
+    font-size: 40px;
+    color: var(--accent)
+  }
+
+  .sidenav{
+    margin-top: 80px;
+    padding-top: 40px;
+    width: 200px;
+    background: var(--darkest);
+    position: fixed;
+    height: 100vh;
+    padding: 0 30px;
+    transition: all 0.8s;
+    left: -100%;
+    overflow-y: auto;
+  }
+  .sidenav.active {
+    left: 0;
+    
+  }
+.nav-ul{
+    padding: 0;
+}
+.nav-ul .nav-li{
+    list-style-type: none;
+    color: white !important;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.nav-ul .nav-li .nav-a{
+    text-decoration: none;
+    font-size: 18px;
+    display: block;
+    padding: 10px 15px;
+    border-radius: 6px;
+}
+
+.nav-ul .nav-li .nav-a:hover{
+    background-color: var(--orangelight);
+}
+
+.logo{
+    width: 150px;
+    padding: 10px;
+}
+

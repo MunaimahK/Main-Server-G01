@@ -1,0 +1,36 @@
+body{
+    background-color: white;
+}
+.main-body{
+    height: 90vh;
+    margin-left: 40vh;
+    display: flex;
+    background-color: white !important;
+    flex-grow: 1;
+    display: grid;
+    place-items: left;
+    transition: margin-left 0.5s;
+    position: relative;
+}
+.main {
+    background-color: white;
+
+}
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    
+}
+.header-dashboard {
+    top: 0;
+    z-index: 100; /* Set a high z-index to ensure the header is dominant */
+}
+
+.expanded {
+    background-color: white;
+}
+
+.profile-icon{
+    float: right;
+    margin-right: 5vh;
+}
