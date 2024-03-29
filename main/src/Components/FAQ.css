@@ -1,9 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap");
-
+/*
 body {
-  background-color: rgb(12, 25, 59); /* dark blue background */
+  background-color: rgb(12, 25, 59); /* dark blue background 
   font-family: "Poppins", sans-serif;
-}
+}*/
 
 .faq-container {
   display: flex;

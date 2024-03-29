@@ -1,14 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap");
-
+/*
 body#star-theme {
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  /*background: radial-gradient(ellipse at bottom, rgb(1, 2, 24), rgb(0, 0, 0));*/
+  /*background: radial-gradient(ellipse at bottom, rgb(1, 2, 24), rgb(0, 0, 0));
   background: radial-gradient(ellipse at bottom, rgb(12, 25, 59), rgb(0, 0, 0));
   overflow: hidden;
-}
+}*/
 
 .front-page {
   position: relative;
