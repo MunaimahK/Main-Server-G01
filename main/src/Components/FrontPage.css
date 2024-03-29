@@ -336,7 +336,6 @@
   border: 10px solid transparent;
   border-bottom-color: rgb(255, 163, 77);
 }
-*/
 
 .avatar::before,
 .avatar::after {
@@ -381,3 +380,4 @@
   border-top-color: var(--tooltip-color);
   transform-origin: bottom center;
 }
+*/

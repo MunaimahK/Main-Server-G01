@@ -24,11 +24,12 @@
   justify-content: space-between;
   align-items: center;
   padding: 60px 35% 0px;
-  margin-left: 40px;
+  margin-left: 0px;
 }
 
 .home-content-about {
   max-width: 600px;
   position: absolute;
   font-size: 16px;
+  margin-left: 5vh;
 }

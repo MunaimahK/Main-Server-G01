@@ -49,6 +49,7 @@ const AboutR = () => {
         </nav>
       </header>
       <section class="home-about">
+        <div className="vl"></div>
         <div class="home-content-about">
           <h3>What does Influx Do?</h3>
           <p>

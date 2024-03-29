@@ -27,7 +27,7 @@ const FrontPage = () => {
         <nav className="navbar">
           <a
             data-tooltip="Just a quick run through Discord OAuth, and then you can join clubs"
-            href="https://discord.com/api/oauth2/authorize?client_id=1206671973191516211&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2Fapi%2Fauth%2Fdiscord%2Fdashboard&scope=identify+email"
+            href="https://discord.com/oauth2/authorize?client_id=1179068530273034290&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2Fapi%2Fauth%2Fdiscord%2Fdashboard&scope=identify+email"
             className={activeLink === "OAUTH" ? "active" : "avatar"}
             onClick={() => handleLinkClick("OAUTH")}
           >

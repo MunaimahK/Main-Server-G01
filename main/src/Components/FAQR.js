@@ -68,7 +68,7 @@ const FAQR = () => {
         <div class="home-content-faq">
           <ul>
             {" "}
-            <li className="question">
+            <div className="q-box"><li className="question">
               {" "}
               How can I use Influx for my club/organization?
             </li>
@@ -77,7 +77,8 @@ const FAQR = () => {
               will be expanding to include more clubs/organizations with Influx
               V2 so stay tuned!
             </li>
-            <li className="question">
+            </div>
+            <div className="q-box"><li className="question">
               How is Influx different from KnightConnect?
             </li>
             <li className="answer">
@@ -86,14 +87,14 @@ const FAQR = () => {
               Influx provides a unified platform where admins can verify
               attendance, have members pay dues, fill out sign up questions,
               etc.
-            </li>
-            <li className="question">What technologies does Influx use?</li>
+            </li></div>
+            <div className="q-box"> <li className="question">What technologies does Influx use?</li>
             <li className="answer">
               Here are a few of the technologies that were used to put Influx
               together: Docker, Postman for API testing, mongoDB, Stripe for
               dues payments, and AWS for our cloud service.
-            </li>
-            <li className="question">
+            </li></div>
+           <div className="q-box"><li className="question">
               What are some things that will be added to Influx V2?
             </li>
             <li className="answer">
@@ -101,7 +102,8 @@ const FAQR = () => {
               events, election/poll systems, and making Influx a mobile
               application. These features along with horizontal scaling will
               make it capable to add more clubs/organizations to Influx.
-            </li>
+            </li></div>
+            
           </ul>
         </div>
       </section>
