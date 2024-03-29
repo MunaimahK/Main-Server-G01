@@ -20,6 +20,7 @@ import RenderControllers from "./Components/RenderControllers.js";
 import FrontPage from "./Components/FrontPage.js";
 import AboutR from "./Components/AboutR.js";
 import FAQR from "./Components/FAQR.js";
+import DashboardR from "./Components/DashboardR.js";
 
 // Knight Hacks img 1 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIHZlnuvnNWPsSs-9iltSdMx3fEjByztOWDgsNdVLPlDZjTUMyuRwRonlvENldynzVEzA&usqp=CAU"
 // Knight Hacks img 2 = https://avatars.githubusercontent.com/u/11686531?s=200&v=4
@@ -55,7 +56,7 @@ function App() {
           path="/dashboard"
           element={
             <>
-              <Dashboard />
+              <DashboardR />
             </>
           }
         />

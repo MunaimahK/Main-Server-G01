@@ -7,15 +7,25 @@
   font-family: "Poppins", sans-serif;
 }
 */
+
+:root {
+  --darkest: rgb(19, 30, 37);
+  --middle: #1f4287;
+  --light: #278ea5;
+  --accent: #21e6c1;
+  --white: rgb(255, 255, 255);
+  --orangelight:rgb(255, 163, 77) ;
+  --orangedeep:rgb(255, 124, 0);
+}
 h2 {
   font-weight: 300;
 }
 .card {
-  background-color: rgb(255, 255, 255);
-  border: 4px solid rgb(221, 192, 6);
+  background-color: var(--white);
+  border: 1px solid var(--darkest);
   border-radius: 15px;
   box-shadow: 5px 5px 5px hsl(0, 0%, 0% 0.1);
-  padding: 20px;
+  padding: 15px;
   margin: 10px;
   text-align: center;
   max-width: 250px;
@@ -36,7 +46,8 @@ h2 {
 }
 
 .card:hover {
-  border: 3px solid rgb(221, 192, 6);
+  border: 2px solid var(--middle);
+  scale: 1.01;
 }
 
 .card .card-title {
@@ -47,7 +58,7 @@ h2 {
 
 .card .card-text {
   margin: 0;
-  color: hsl(0, 0%, 40%);
+  color: var(--darkest);
 }
 
 a.link-to-controller {
@@ -64,6 +75,8 @@ a.link-to-controller {
 .btn:hover,
 .card-title:hover {
   opacity: 60%;
+  border-color: var(--orangelight);
+  color: var(--darkest)
 }
 .card:hover .card-title:hover {
   text-decoration: none;
@@ -113,7 +126,7 @@ a.link-to-controller {
 .Container-Form {
   align-items: center;
   margin-left: 2vh;
-  padding-top: 12vh;
+  padding-top: 0vh;
 }
 
 .Container-Form .Container-Form-Content .e1 {
