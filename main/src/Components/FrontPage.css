@@ -36,6 +36,7 @@
 
 :root {
   --darkest: #011023;
+  --frontpage: rgb(19, 30, 37);
   --middle: #1f4287;
   --light: #278ea5;
   --accent: #21e6c1;

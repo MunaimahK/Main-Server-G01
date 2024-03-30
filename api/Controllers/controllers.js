@@ -969,6 +969,26 @@ const checkDuesForStats = async (req, res) => {
     console.log(err);
   }
 };
+
+const totalController = async (req, res) => {
+  try {
+    const count = await cModel.countDocuments();
+    res.json({ data: count });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+const totalAdmins = async (req, res) => {
+  try {
+    const count = await Admin.countDocuments();
+    res.json({ data: count });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
   test,
   firstTimeQ,
@@ -991,4 +1011,6 @@ module.exports = {
   borrowGeneral,
   updateCArray,
   checkDuesForStats,
+  totalController,
+  totalAdmins,
 };
