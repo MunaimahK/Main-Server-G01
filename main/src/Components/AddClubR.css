@@ -1,0 +1,151 @@
+:root {
+  --darkest: #011023;
+  --middle: #1f4287;
+  --light: #278ea5;
+  --accent: #21e6c1;
+  --white: rgb(255, 255, 255);
+  --orangedeep: rgb(255, 124, 0);
+  --orangelight: rgb(255, 163, 77);
+}
+
+.grid-container-add {
+  display: grid;
+  grid-template-columns: 260px 1fr 1fr 1fr;
+  grid-template-rows: 0.2fr 3fr;
+  grid-template-areas:
+    "sidebar header header header"
+    "sidebar main main main";
+  height: 100vh;
+}
+/*
+.form-container-add-club {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 20px;
+  margin: 50% 50%;
+  height: 50vh;
+  width: 50vh;
+}
+
+.form-container-add-club form {
+  background-color: var(--light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 40px 80px;
+  height: 100%;
+  border-radius: 15px;
+}
+*/
+
+.form-container-add-club {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 10px;
+  margin: 0 auto;
+  /* Center the grid horizontally */
+  max-width: 800px; /* Adjust max-width as per your design */
+  padding: 0 20px; /* Add padding to prevent sticking to the edges */
+  height: 50vh;
+  width: 50vh;
+  justify-items: center; /* Center items horizontally */
+  align-items: center;
+}
+
+.form-container-add-club form {
+  margin-top: 50%;
+  height: 80%;
+  background-color: var(--light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 10px 80px;
+  border-radius: 15px;
+  width: 100%;
+}
+
+.form-container-add-club input {
+  background-color: #eee;
+  border: none;
+  margin: 8px 0;
+  padding: 10px 15px;
+  font-size: 13px;
+  border-radius: 8px;
+  width: auto;
+  outline: none;
+}
+
+.form-container-add-club .btn-add {
+  background-color: var(--orangelight);
+  color: #fff;
+  font-size: 12px;
+  padding: 10px 45px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-weight: 600;
+  letter-spacing: 01px;
+  text-transform: uppercase;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.form-container-add-club h4,
+p {
+  color: white;
+}
+
+.form-container-add-club .btn-add:hover {
+  background-color: var(--orangedeep);
+  color: #fff;
+}
+
+/* Small <= 768px */
+@media screen and (max-width: 768px) {
+  .form-container-add-club {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 50%;
+  }
+}
+
+/* Extra Small <= 576px */
+@media screen and (max-width: 576px) {
+  .header-left {
+    display: none;
+  }
+  .form-container-add-club {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 50%;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .grid-container-add {
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.2fr 3fr;
+    grid-template-areas:
+      "header"
+      "main";
+  }
+  .form-container-add-club {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 50%;
+  }
+
+  #sidebar {
+    display: none;
+  }
+
+  .menu-icon {
+    display: inline;
+  }
+
+  .sidebar-title span {
+    display: inline;
+    color: red;
+  }
+}

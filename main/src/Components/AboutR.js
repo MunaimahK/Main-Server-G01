@@ -20,7 +20,7 @@ const AboutR = () => {
   };
   return (
     <div class="main-pg-about">
-      <header class="header">
+      <header class="header-front">
         <a href="/influx" class="logo">
           Influx
         </a>
