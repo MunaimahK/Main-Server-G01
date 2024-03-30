@@ -1,36 +1,49 @@
-body{
-    background-color: white;
+body {
+  background-color: white;
+  --dashbaordpadding: 30px;
 }
-.main-body{
-    height: 90vh;
-    margin-left: 40vh;
-    display: flex;
-    background-color: white !important;
-    flex-grow: 1;
-    display: grid;
-    place-items: left;
-    transition: margin-left 0.5s;
-    position: relative;
+.main-body {
+  height: 90vh;
+  margin-left: 40vh;
+  display: flex;
+  background-color: white !important;
+  flex-grow: 1;
+  display: grid;
+  place-items: left;
+  transition: margin-left 0.5s;
+  position: relative;
 }
 .main {
-    background-color: white;
-
+  background-color: white;
 }
+
+.header-dashboard {
+  position: fixed;
+  width: 100%;
+  padding: var(--dashbaordpadding);
+  background: var(--darkest);
+  height: 10px;
+}
+.header-dashboard svg {
+  font-size: 50px;
+  margin-top: -25px;
+  color: var(--accent);
+}
+
 .dashboard-container {
-    display: flex;
-    flex-direction: column;
-    
+  display: flex;
+  flex-direction: column;
 }
 .header-dashboard {
-    top: 0;
-    z-index: 100; /* Set a high z-index to ensure the header is dominant */
+  top: 0;
+  z-index: 100; /* Set a high z-index to ensure the header is dominant */
 }
 
 .expanded {
-    background-color: white;
+  background-color: white;
 }
 
-.profile-icon{
-    float: right;
-    margin-right: 5vh;
+.profile-icon {
+  float: right;
+  margin-right: 5vh;
 }

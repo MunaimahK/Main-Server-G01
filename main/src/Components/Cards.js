@@ -480,7 +480,7 @@ const Cards = (props) => {
                   </button>
                 </div>
 
-                {questions.map((question, index) => (
+                {/*questions.map((question, index) => (
                   <div className="e1" key={index}>
                     <label htmlFor={`question.id-${index}`} id="l">
                       {question.question}
@@ -495,7 +495,7 @@ const Cards = (props) => {
 
                     <br />
                   </div>
-                ))}
+                ))*/}
                 <button id="sub" onClick={submitQ}>
                   Submit
                 </button>
