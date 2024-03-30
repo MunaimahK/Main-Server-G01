@@ -22,6 +22,8 @@ const {
   borrowGeneral,
   updateCArray,
   checkDuesForStats,
+  totalController,
+  totalAdmins,
 } = require("../Controllers/controllers.js");
 router.use(
   cors({
@@ -57,6 +59,8 @@ router.get("/update-answers-send", sendAnswers);
 router.get("/borrow-general-questions", borrowGeneral);
 router.get("/update-clubs-enrolled", updateCArray);
 router.get("/check-stats-per-club", checkDuesForStats);
+router.get("/total/clubs", totalController);
+router.get("/total/admins", totalAdmins);
 
 /*
 router.get("/posts", authenticateToken, (req, res) => {

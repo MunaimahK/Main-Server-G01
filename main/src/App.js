@@ -23,6 +23,9 @@ import FAQR from "./Components/FAQR.js";
 import DashboardR from "./Components/DashboardR.js";
 import AdminSignAndRegister from "./Components/AdminSignAndRegister.js";
 import ForgotPWD from "./Components/ForgotPWD.js";
+import AdminDashboardR from "./Components/AdminDashboardR.js";
+import AddClubR from "./Components/AddClubR.js";
+import AdminDashboard from "./Components/InfluxAdmin/AdminDashboard.js";
 
 // Knight Hacks img 1 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIHZlnuvnNWPsSs-9iltSdMx3fEjByztOWDgsNdVLPlDZjTUMyuRwRonlvENldynzVEzA&usqp=CAU"
 // Knight Hacks img 2 = https://avatars.githubusercontent.com/u/11686531?s=200&v=4
@@ -43,13 +46,13 @@ function App() {
         ></Route>
 
         <Route path="/" element={<Login />}></Route>
-        <Route path="/admin" element={<Admin />}></Route>
+        <Route path="/admin" element={<AdminDashboard />}></Route>
         <Route path="/forget/password" element={<ForgotPWD />}></Route>
         <Route path="/admin/login" element={<AdminSignAndRegister />}></Route>
         <Route path="/admin/signup" element={<AdminSignUp />}></Route>
         <Route path="/about" element={<AboutNew />}></Route>
         <Route path="/influx/faq" element={<FAQ />}></Route>
-        <Route path="/admin/add/club" element={<AddClub />}></Route>
+        <Route path="/admin/add/club" element={<AddClubR />}></Route>
         <Route
           path="/see/all/controllers"
           element={<RenderControllers />}

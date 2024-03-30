@@ -1,0 +1,36 @@
+.Icon {
+  vertical-align: middle;
+  line-height: 1px;
+  font-size: 20px;
+}
+
+.icon_header {
+  vertical-align: middle;
+  line-height: 1px;
+  font-size: 26px;
+}
+.close_icon {
+  color: red;
+  margin-left: 30px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.Icon,
+.icon_header {
+  margin-right: 5px;
+}
+
+.header-admin {
+  grid-area: header;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px 0 30px;
+  box-shadow: 0 6px 7px -3px black;
+}
+
+.menu-icon {
+  display: none;
+}
