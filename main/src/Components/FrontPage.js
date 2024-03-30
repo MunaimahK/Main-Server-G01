@@ -20,7 +20,7 @@ const FrontPage = () => {
   };
   return (
     <div class="main-pg">
-      <header class="header">
+      <header class="header-front">
         <a href="/influx" class="logo">
           Influx
         </a>

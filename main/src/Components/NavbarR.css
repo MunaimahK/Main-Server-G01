@@ -33,7 +33,15 @@
   margin-top: 10px;
   margin-bottom: 10px;
 }
-.nav-ul .nav-li .nav-a {
+.lg-out-button {
+  background-color: transparent;
+  border: none;
+  color: white;
+  width: 100%;
+  text-align: left;
+}
+.nav-ul .nav-li .nav-a,
+.lg-out-button {
   text-decoration: none;
   font-size: 18px;
   display: block;
@@ -41,11 +49,18 @@
   border-radius: 6px;
 }
 
-.nav-ul .nav-li .nav-a:hover {
+.nav-ul .nav-li .nav-a:hover,
+.lg-out-button:hover {
   background-color: var(--orangelight);
 }
 
 .logo {
   width: 150px;
   padding: 10px;
+}
+
+.nav-a {
+}
+
+.lg-out-button {
 }

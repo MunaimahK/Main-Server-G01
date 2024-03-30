@@ -322,6 +322,8 @@ const discordOAuth = async (req, res) => {
 };
 
 const logoutMain = async (req, res) => {
+  console.log("In Logout mAIN");
+
   console.log(req.cookies.access_token);
   console.log(req.cookies.refreshToken_token);
   res.clearCookie("access_token");

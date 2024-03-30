@@ -36,7 +36,7 @@ const FAQR = () => {
   };
   return (
     <div class="main-pg-FAQ">
-      <header class="header">
+      <header class="header-front">
         <a href="/influx" class="logo">
           Influx
         </a>
@@ -68,42 +68,49 @@ const FAQR = () => {
         <div class="home-content-faq">
           <ul>
             {" "}
-            <div className="q-box"><li className="question">
-              {" "}
-              How can I use Influx for my club/organization?
-            </li>
-            <li className="answer">
-              Currently, we are only working with Hack@UCF and KnightHacks. We
-              will be expanding to include more clubs/organizations with Influx
-              V2 so stay tuned!
-            </li>
+            <div className="q-box">
+              <li className="question">
+                {" "}
+                How can I use Influx for my club/organization?
+              </li>
+              <li className="answer">
+                Currently, we are only working with Hack@UCF and KnightHacks. We
+                will be expanding to include more clubs/organizations with
+                Influx V2 so stay tuned!
+              </li>
             </div>
-            <div className="q-box"><li className="question">
-              How is Influx different from KnightConnect?
-            </li>
-            <li className="answer">
-              KnightConnect does not provide members and admins with a
-              centralized platform to use for all their organization needs.
-              Influx provides a unified platform where admins can verify
-              attendance, have members pay dues, fill out sign up questions,
-              etc.
-            </li></div>
-            <div className="q-box"> <li className="question">What technologies does Influx use?</li>
-            <li className="answer">
-              Here are a few of the technologies that were used to put Influx
-              together: Docker, Postman for API testing, mongoDB, Stripe for
-              dues payments, and AWS for our cloud service.
-            </li></div>
-           <div className="q-box"><li className="question">
-              What are some things that will be added to Influx V2?
-            </li>
-            <li className="answer">
-              We would like to implement backlogged functionalities such as
-              events, election/poll systems, and making Influx a mobile
-              application. These features along with horizontal scaling will
-              make it capable to add more clubs/organizations to Influx.
-            </li></div>
-            
+            <div className="q-box">
+              <li className="question">
+                How is Influx different from KnightConnect?
+              </li>
+              <li className="answer">
+                KnightConnect does not provide members and admins with a
+                centralized platform to use for all their organization needs.
+                Influx provides a unified platform where admins can verify
+                attendance, have members pay dues, fill out sign up questions,
+                etc.
+              </li>
+            </div>
+            <div className="q-box">
+              {" "}
+              <li className="question">What technologies does Influx use?</li>
+              <li className="answer">
+                Here are a few of the technologies that were used to put Influx
+                together: Docker, Postman for API testing, mongoDB, Stripe for
+                dues payments, and AWS for our cloud service.
+              </li>
+            </div>
+            <div className="q-box">
+              <li className="question">
+                What are some things that will be added to Influx V2?
+              </li>
+              <li className="answer">
+                We would like to implement backlogged functionalities such as
+                events, election/poll systems, and making Influx a mobile
+                application. These features along with horizontal scaling will
+                make it capable to add more clubs/organizations to Influx.
+              </li>
+            </div>
           </ul>
         </div>
       </section>
