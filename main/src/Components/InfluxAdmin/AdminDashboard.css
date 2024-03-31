@@ -74,6 +74,7 @@
 
 .sidebar-list-item {
   padding: 20px 20px 20px 20px;
+  width: 100%;
   font-size: 18px;
 }
 
@@ -87,9 +88,16 @@
 .sidebar-list-item a:hover {
   font-weight: 400;
 }
-.sidebar-list-item > a {
+
+.sidebar-list-item a {
+  padding: 20px 20px 20px 20px;
+  font-size: 18px;
   text-decoration: none;
   color: white;
+}
+
+.hover-text {
+  height: 30vh;
 }
 
 .sidebar-responsive {
@@ -102,6 +110,14 @@
   width: 150px;
 }
 
+.sidebar-list .bottom-items {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 260px;
+
+  /* Adjust left position as needed */ /* Ensure it spans the full width of the sidebar */
+}
 /* Main  */
 .main-container {
   grid-area: main;
@@ -203,6 +219,7 @@
 }
 
 /* Extra Small <= 576px */
+
 @media screen and (max-width: 576px) {
   .header-left {
     display: none;

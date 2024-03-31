@@ -1,8 +1,8 @@
 import React from "react";
 import axios from "axios";
-import Cards from "./Cards";
+import Cards from "../ClubCard/Cards";
 import { useState, useEffect } from "react";
-import { Grid } from '@mui/material';
+import { Grid } from "@mui/material";
 const RenderControllers = () => {
   const [clubs, setClubs] = useState([
     { ClubName: "Test" },
@@ -33,16 +33,13 @@ const RenderControllers = () => {
   }, []);
 
   const clubComponent = clubs.map((club, index) => (
-    
-
-      <Cards
+    <Cards
       title={club.name}
       text={club.text}
       img={club.logo}
       redirect={club.frontend}
       redirect_b={club.backend}
     />
-    
   ));
 
   return <div>{clubComponent}</div>;

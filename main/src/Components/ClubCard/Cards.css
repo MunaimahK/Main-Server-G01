@@ -14,13 +14,13 @@
   --light: #278ea5;
   --accent: #21e6c1;
   --white: rgb(255, 255, 255);
-  --orangelight:rgb(255, 163, 77) ;
-  --orangedeep:rgb(255, 124, 0);
+  --orangelight: rgb(255, 163, 77);
+  --orangedeep: rgb(255, 124, 0);
 }
 h2 {
   font-weight: 300;
 }
-.card {
+.card-club {
   background-color: var(--white);
   border: 1px solid var(--darkest);
   border-radius: 15px;
@@ -45,18 +45,18 @@ h2 {
   object-fit: cover;
 }
 
-.card:hover {
+.card-club:hover {
   border: 2px solid var(--middle);
   scale: 1.01;
 }
 
-.card .card-title {
+.card-club.card-title {
   /* font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;*/
   margin: 0;
   color: hsl(0, 0%, 20%);
 }
 
-.card .card-text {
+.card-club .card-text {
   margin: 0;
   color: var(--darkest);
 }
@@ -76,9 +76,9 @@ a.link-to-controller {
 .card-title:hover {
   opacity: 60%;
   border-color: var(--orangelight);
-  color: var(--darkest)
+  color: var(--darkest);
 }
-.card:hover .card-title:hover {
+.card-club:hover .card-title:hover {
   text-decoration: none;
 }
 

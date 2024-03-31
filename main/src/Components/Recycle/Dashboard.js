@@ -3,7 +3,7 @@ import "./Dashboard.css";
 import React from "react";
 import axios from "axios";
 import logo from "./influx-logo.png";
-import RenderControllers from "./RenderControllers";
+import RenderControllers from "../InfluxDashboard/RenderControllers";
 
 const Dashboard = () => {
   const logOut = async () => {

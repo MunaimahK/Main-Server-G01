@@ -31,7 +31,7 @@ const FrontPage = () => {
             className={activeLink === "OAUTH" ? "active" : "avatar"}
             onClick={() => handleLinkClick("OAUTH")}
           >
-            Let's Go
+            Dashboard
           </a>
           <a
             href="/about/us/influx/senior/deign/24"

@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 
 import { FaArrowAltCircleLeft } from "react-icons/fa";
 
-const Sidebar = () => {
+const Sidebar = ({ show }) => {
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
 
@@ -34,7 +34,7 @@ const Sidebar = () => {
     // navigate("/admin/login");
   };
   return (
-    <aside id="sidebar">
+    <aside id="sidebar" className={show ? "sidebar active" : "sidebar"}>
       <div className="sidebar-title">
         <div className="sidebar-brand">
           <img src={logo} className="img-logo-sidebar" />
@@ -48,50 +48,30 @@ const Sidebar = () => {
           </a>
         </li>
         <li className="sidebar-list-item">
-          <a href="/admin/add/club">
+          <a href="/admin/add/club" className="hover-text">
             <BsFillGrid3X3GapFill className="Icon" /> Register Club
           </a>
         </li>
         <li className="sidebar-list-item">
-          <a href="/member/promote/admin">
+          <a href="/promote/user/to/admin" className="hover-text">
             <BsPeopleFill className="Icon" /> Promote Admin
           </a>
         </li>
 
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-
-        <li className="sidebar-list-item">
-          <a href="">
-            <BsFillGearFill className="Icon" /> Settings
-          </a>
-        </li>
-        <li className="sidebar-list-item">
-          <a href="/admin/login">
-            <BsArrowLeftSquareFill className="Icon" onClick={logOut} /> Log Out
-          </a>
-        </li>
+        <div className="bottom-items">
+          {" "}
+          <li className="sidebar-list-item">
+            <a href="" className="hover-text">
+              <BsFillGearFill className="Icon" /> Settings
+            </a>
+          </li>
+          <li className="sidebar-list-item">
+            <a href="/admin/login" className="hover-text">
+              <BsArrowLeftSquareFill className="Icon" onClick={logOut} /> Log
+              Out
+            </a>
+          </li>
+        </div>
       </ul>
     </aside>
   );

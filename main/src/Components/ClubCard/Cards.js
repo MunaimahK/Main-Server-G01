@@ -333,7 +333,7 @@ const Cards = (props) => {
     setQuestions(updatedQuestions);
   };
   return (
-    <div className="card">
+    <div className="card-club">
       <img className="card-img" src={props.img} alt="c1-logo"></img>
       <h2 className="card-title">{props.title}</h2>
       <p className="card-text">{props.text}</p>

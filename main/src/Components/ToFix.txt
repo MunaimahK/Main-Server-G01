@@ -1,0 +1,8 @@
+add hover elements to card on dashboard COMPLETE
+
+Connect Reset Password Backend
+On Reset Form, add a Log In button to toggle back to sign in COMPLETE
+
+Every time login occurs, a new admin is added (resolve on backend)
+Promote Admin form does not clear values (make it similar to regiser club form)
+links on sidebar in admin only click label, the div isn't (unresolved)
