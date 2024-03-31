@@ -9,7 +9,7 @@ import SettingsEthernetIcon from "@material-ui/icons/SettingsEthernet";
 import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
-import AdminNav from "./AdminNav";
+import AdminNav from "../Recycle/AdminNav";
 
 const AdminNavR = () => {
   const AdminNavData = [

@@ -3,7 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import "./Admin.css";
 import { useContext } from "react";
-import { UserContext } from "./context/userContext";
+import { UserContext } from "../context/userContext";
 import { useNavigate } from "react-router-dom";
 import AdminNav from "./AdminNav";
 

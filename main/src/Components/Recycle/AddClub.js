@@ -3,7 +3,7 @@ import Dashboard from "./Dashboard";
 import axios from "axios";
 import AdminNav from "./AdminNav";
 import { useContext } from "react";
-import { UserContext } from "./context/userContext";
+import { UserContext } from "../context/userContext";
 import "./AddClub.css";
 
 const AddClub = () => {

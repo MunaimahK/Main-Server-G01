@@ -21,6 +21,7 @@ const ForgotPWD = () => {
             <h1>Reset Password</h1>
             <span>Please enter your email to get a reset link</span>
             <input type="email" placeholder="Email" />
+            <a href="/admin/login">Go Back to Log In</a>
             <button onClick={resetPWD}>Submit</button>
           </form>
         </div>

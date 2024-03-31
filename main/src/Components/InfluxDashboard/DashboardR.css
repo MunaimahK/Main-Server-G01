@@ -25,9 +25,10 @@ body {
   height: 10px;
 }
 .header-dashboard svg {
-  font-size: 50px;
-  margin-top: -25px;
+  font-size: 40px;
+  margin-top: -20px;
   color: var(--accent);
+  margin-left: 5px;
 }
 
 .dashboard-container {

@@ -1,31 +1,30 @@
 import "./App.css";
 import placeholderLogo from "./Components/location-pin.png";
-import Login from "./Components/Login";
+import Login from "./Components/Recycle/Login.js";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Route, Routes, Redirect } from "react-router-dom";
 //import Dashboard from "./Components/Dashboard";
 import axios from "axios";
-import Cards from "./Components/Cards";
-import Dashboard from "./Components/Dashboard";
-import Admin from "./Components/Admin.js";
-import AdminSignUp from "./Components/AdminSignUp.js";
-import AdminLogin from "./Components/AdminLogin.js";
-import About from "./Components/About.js";
+import Cards from "./Components/ClubCard/Cards.js";
+import Dashboard from "./Components/Recycle/Dashboard.js";
+import Admin from "./Components/Recycle/Admin.js";
+import AdminSignUp from "./Components/Recycle/AdminSignUp.js";
+import AdminLogin from "./Components/Recycle/AdminLogin.js";
 import { UserContextProvider } from "./Components/context/userContext.js";
-import DuesStats from "./Components/DuesStats.js";
-import AboutNew from "./Components/AboutNew.js";
-import FAQ from "./Components/FAQ.js";
-import AddClub from "./Components/AddClub.js";
-import RenderControllers from "./Components/RenderControllers.js";
-import FrontPage from "./Components/FrontPage.js";
-import AboutR from "./Components/AboutR.js";
-import FAQR from "./Components/FAQR.js";
-import DashboardR from "./Components/DashboardR.js";
-import AdminSignAndRegister from "./Components/AdminSignAndRegister.js";
-import ForgotPWD from "./Components/ForgotPWD.js";
-import AdminDashboardR from "./Components/AdminDashboardR.js";
-import AddClubR from "./Components/AddClubR.js";
+import DuesStats from "./Components/ClubCard/DuesStats.js";
+import AboutNew from "./Components/Recycle/AboutNew.js";
+import FAQ from "./Components/Recycle/FAQ.js";
+import AddClub from "./Components/Recycle/AddClub.js";
+import RenderControllers from "./Components/InfluxDashboard/RenderControllers.js";
+import FrontPage from "./Components/InfluxFront/FrontPage.js";
+import AboutR from "./Components/InfluxFront/AboutR.js";
+import FAQR from "./Components/InfluxFront/FAQR.js";
+import DashboardR from "./Components/InfluxDashboard/DashboardR.js";
+import AdminSignAndRegister from "./Components/AdminAccount/AdminSignAndRegister.js";
+import ForgotPWD from "./Components/AdminAccount/ForgotPWD.js";
+import AddClubR from "./Components/InfluxAdmin/AddClubR.js";
 import AdminDashboard from "./Components/InfluxAdmin/AdminDashboard.js";
+import PromoteAdmin from "./Components/InfluxAdmin/PromoteAdmin.js";
 
 // Knight Hacks img 1 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIHZlnuvnNWPsSs-9iltSdMx3fEjByztOWDgsNdVLPlDZjTUMyuRwRonlvENldynzVEzA&usqp=CAU"
 // Knight Hacks img 2 = https://avatars.githubusercontent.com/u/11686531?s=200&v=4
@@ -53,6 +52,7 @@ function App() {
         <Route path="/about" element={<AboutNew />}></Route>
         <Route path="/influx/faq" element={<FAQ />}></Route>
         <Route path="/admin/add/club" element={<AddClubR />}></Route>
+        <Route path="/promote/user/to/admin" element={<PromoteAdmin />}></Route>
         <Route
           path="/see/all/controllers"
           element={<RenderControllers />}

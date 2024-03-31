@@ -1,8 +1,8 @@
-import Placeholder from "./user.png";
 import "./Dashboard.css";
 import React from "react";
 import axios from "axios";
 import logo from "./influx-logo.png";
+import Placeholder from "./user.png";
 
 const AdminNav = () => {
   const logOut = async () => {
