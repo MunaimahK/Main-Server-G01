@@ -5,12 +5,12 @@ import axios from "axios";
 import Model from "react-modal";
 
 import { useParams } from "react-router-dom";
-import ClubStats from "../../ClubStats";
+import ClubStats from "../ClubStats";
 
 import { toast, useToast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import RenderDueStats from "../../RenderDueStats";
-import CustomQForm from "../../CustomQForm";
+import RenderDueStats from "../RenderDueStats";
+import CustomQForm from "../CustomQForm";
 
 const Cards = (props) => {
   const navigate = useNavigate();

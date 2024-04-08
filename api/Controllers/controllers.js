@@ -451,6 +451,9 @@ const firstTimeQ = async (req, res) => {
   let count;
   const token = req.cookies.access_token;
   const decodedToken = jwt.decode(token);
+  console.log("TOKEN IN FIRSTTIMEQ MAIN", token);
+  console.log("DECODED TOKEN IN FIRSTTIMEQ MAIN", decodedToken);
+  console.log("DECODED TOKEN ID IN FIRSTTIMEQ MAIN", decodedToken._id);
 
   // console.log("DECODED TOKEN IN FTQ:  ", decodedToken.UID);
   // gather name, major, and grad date from request body coming from forntend axios.get
@@ -464,13 +467,24 @@ const firstTimeQ = async (req, res) => {
   classStanding,
   backend_url,
   frontend_url, */
-
+  /*
   const {
     f_name,
     surname,
     email,
     NID,
     Gender,
+    major,
+    classStanding,
+    clubTitle,
+  } = req.body;*/
+
+  const {
+    firstName,
+    surname,
+    email,
+    nid,
+    gender,
     major,
     classStanding,
     clubTitle,
@@ -483,6 +497,7 @@ const firstTimeQ = async (req, res) => {
       // "http://localhost:8000/one-time-signup-server",
       `${req.body.backend_url}/one-time-signup-server`,
       {
+        /*
         params: {
           UID: decodedToken.UID,
           f_name,
@@ -492,11 +507,23 @@ const firstTimeQ = async (req, res) => {
           Gender,
           major,
           classStanding,
+        },*/
+        params: {
+          UID: decodedToken.UID,
+          firstName,
+          surname,
+          email,
+          nid,
+          gender,
+          major,
+          classStanding,
         },
       }
-    );
-
+    ); /*
+    console.log("REQ . CLUBS", req.clubs);
     if (req.clubs == null) {
+      console.log(decodedToken._id);
+
       const user = await U.findOneAndUpdate({
         $push: {
           clubs: {
@@ -506,12 +533,44 @@ const firstTimeQ = async (req, res) => {
           },
         },
       }).where(decodedToken._id);
+      console.log("USER", user);
 
       console.log("USER ARRAY CLUB: ", user.clubs);
       console.log("USER ARRAY CLUB clubname: ", user.clubs.clubName);
       res.json(response.data);
       console.log(response.data);
-    }
+    }*/
+    console.log(decodedToken._id);
+    /*
+    const user = await U.findByIdAndUpdate({
+      $push: {
+        clubs: {
+          clubName: clubTitle,
+          redirect: frontend_url,
+          redirect_b: backend_url,
+        },
+      },
+    }).where(decodedToken._id);*/
+
+    const user = await U.findByIdAndUpdate(
+      decodedToken._id,
+      {
+        $push: {
+          clubs: {
+            clubName: clubTitle,
+            redirect: frontend_url,
+            redirect_b: backend_url,
+          },
+        },
+      },
+      { new: true }
+    );
+    console.log("USER", user);
+
+    console.log("USER ARRAY CLUB: ", user.clubs);
+    console.log("USER ARRAY CLUB clubname: ", user.clubs.clubName);
+    res.json(response.data);
+    console.log(response.data);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -599,23 +658,38 @@ const isEnrolled = async (req, res, next) => {
   console.log("member:  ", test);
   if (member) {
     console.log("IS ENROLLED CLUB:  ", member.clubs);
-
+    console.log("IS ENROLLED CLUB:  ", member.clubs.length);
     console.log("member:  ", member);
 
     if (member) {
-      res.json({
-        error: true,
-        clubName: member.clubs,
-      });
+      if (member.clubs.length > 0) {
+        res.json({
+          error: true,
+          clubName: member.clubs,
+          length: member.clubs.length,
+        });
+      } else {
+        res.json({
+          error: false,
+          length: member.clubs.length,
+        });
+      }
     } else {
       res.json({
         error: false,
+      });
+    } /*
+    if (member.clubs.length > 0) {
+      res.json({
+        error: true,
+        clubName: member.clubs,
       });
     }
   } else {
     res.json({
       error: false,
     });
+  }*/
   }
 };
 
@@ -871,8 +945,9 @@ const sendAnswers = async (req, res) => {
 
 const borrowGeneral = async (req, res) => {
   console.log("borrow");
-  const borrowFrom = req.query.borrowFrom;
-  const isBorrowing = req.query.isBorrowing;
+
+  const borrowFrom = req.query.clubLenderURL;
+  const isBorrowing = req.query.backend_url;
   console.log(borrowFrom, isBorrowing);
   const UID = jwt.decode(req.cookies.access_token).UID;
   const id = jwt.decode(req.cookies.access_token)._id;
@@ -916,14 +991,17 @@ const borrowGeneral = async (req, res) => {
               id,
             },
           })
-          .then((res) => {
-            console.log(res.data.msg);
+          .then(() => {
+            // console.log("TAKE GENERAL", res.data.msg);
+            console.log("TAKE GENERAL");
           });
       });
   } catch (err) {
     console.log(err);
   }
+
   res.json({ msg: true });
+  // res.status(500);
 };
 const updateCArray = async (req, res) => {
   const decode = jwt.decode(req.cookies.access_token);
