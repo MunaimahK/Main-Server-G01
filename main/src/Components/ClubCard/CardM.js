@@ -35,7 +35,11 @@ const CardM = (props) => {
         <Typography variant="body2" color="text.secondary">
           {props.text}
         </Typography>
-        <CardButton />
+        <CardButton
+          backend_url={props.redirect_b}
+          frontend_url={props.redirect}
+          title={props.title}
+        />
       </CardContent>
     </Card>
   );

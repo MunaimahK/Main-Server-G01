@@ -61,6 +61,7 @@ router.get("/update-clubs-enrolled", updateCArray);
 router.get("/check-stats-per-club", checkDuesForStats);
 router.get("/total/clubs", totalController);
 router.get("/total/admins", totalAdmins);
+// router.get("/check/first/time/enrolled", checkFirstEnrollment);
 
 /*
 router.get("/posts", authenticateToken, (req, res) => {
