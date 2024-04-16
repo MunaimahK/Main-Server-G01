@@ -113,7 +113,7 @@ const PopupFormGeneral = (props) => {
         onClick={handleClickOpen}
         sx={{ marginTop: "2vh", width: "100%", left: "0" }}
       >
-        Club Enrollment Form
+        {props.status ? <h5>Club Enrollment Form</h5> : <h6></h6>}
       </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>General Questions</DialogTitle>

@@ -5,21 +5,11 @@ import { useState, useEffect } from "react";
 import { Grid } from "@mui/material";
 import CardM from "../ClubCard/CardM";
 const RenderControllers = () => {
-  const [clubs, setClubs] = useState([
-    { ClubName: "Test" },
-  ]); /*
-  const getControllers = async (req, res) => {
-    try {
-      const data = await axios.get("/controllers").then((res) => {
-        console.log(res.data.msg);
-        setClubList(res.data.msg);
-        console.log("CLUBS: ", clubs);
+  let i = 0;
 
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  };*/
+  const [enrolledClubList, setEnrolledClubList] = useState([]);
+  const [clubs, setClubs] = useState([{ ClubName: "Test" }]);
+  const [userEnrolled, setUserEnrolled] = useState(false);
 
   useEffect(() => {
     axios
@@ -27,11 +17,39 @@ const RenderControllers = () => {
       .then((response) => {
         console.log("RES:", response);
         setClubs(response.data);
+        if (response.data) {
+          for (i = 0; i < response.data.length; i++) {
+            checkEnrolled(response.data[i]);
+          }
+        }
       })
       .catch((error) => {
         console.error("Error fetching documents:", error);
       });
   }, []);
+
+  const checkEnrolled = async (club) => {
+    try {
+      const data = await axios.get("/isEnrolled", { club }).then((res) => {
+        console.log("CHECK ENROLLED IN RENDER", res.data.error);
+        for (i = 0; i < res.data.clubName.length; i++) {
+          // yields the names of the clubs this user is enrolled in.
+          // append to an array
+          console.log(
+            "CHECK ENROLLED RES IN RENDER",
+            res.data.clubName[i].clubName
+          );
+          setEnrolledClubList(res.data.clubName);
+          console.log("enrolledClublist", enrolledClubList);
+        }
+        // console.log("CHECK ENROLLED RES IN RENDER", res.data.clubName);
+        //   setUserEnrolled(true);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   /*
   const clubComponent = clubs.map((club, index) => (
     <Cards
@@ -53,6 +71,7 @@ const RenderControllers = () => {
             img={club.logo}
             redirect={club.frontend}
             redirect_b={club.backend}
+            enrolled={enrolledClubList}
           />
         </Grid>
       ))}
