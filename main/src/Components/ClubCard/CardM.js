@@ -5,6 +5,9 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import CardButton from "./CardButton";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import ClubStats from "./ClubStats";
 
 const CardM = (props) => {
   return (
@@ -35,14 +38,20 @@ const CardM = (props) => {
         <Typography variant="body2" color="text.secondary">
           {props.text}
         </Typography>
+        <ClubStats
+          backend_url={props.redirect_b}
+          frontend_url={props.redirect}
+          title={props.title}
+          enrolled={props.enrolled}
+        />
         <CardButton
           backend_url={props.redirect_b}
           frontend_url={props.redirect}
           title={props.title}
+          enrolled={props.enrolled}
         />
       </CardContent>
     </Card>
   );
 };
-
 export default CardM;

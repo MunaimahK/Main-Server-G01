@@ -9,17 +9,18 @@
 
 :root {
   --darkest: #011023;
-  --middle: #1f4287;
+  --middle: #5a87c3;
   --light: #278ea5;
   --accent: #21e6c1;
   --white: rgb(255, 255, 255);
   --orangedeep: rgb(255, 124, 0);
   --orangelight: rgb(255, 163, 77);
+  --new: #071221;
 }
 
 .body-sign-in {
   background-color: white;
-  background: linear-gradient(to right, var(--middle), var(--light));
+  background: linear-gradient(to right, var(--darkest), var(--new));
   display: flex;
   align-items: center;
   justify-content: center;

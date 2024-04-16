@@ -311,11 +311,12 @@ const discordOAuth = async (req, res) => {
     });
   }
   if (count == 0) {
+    defaultAdmin(req, res);
+    count++;
     // assignUID(data, res);
     // RESUME LATER
   }
   // console.log(data.UID);
-  defaultAdmin(req, res);
 
   res.redirect(301, "http://localhost:3000/dashboard");
   //}
@@ -644,6 +645,55 @@ const authenticate = async (req, res, next) => {
   }
 };
 
+const isEnrolledClub = async (req, res, next) => {
+  console.log("IS ENROLLED:  ", req.user.UID);
+
+  const member = await U.findOne({
+    UID: req.user.UID,
+  });
+
+  const test = await U.findOne({
+    UID: req.user.UID,
+  });
+  console.log("member:  ", member);
+  console.log("member:  ", test);
+  if (member) {
+    console.log("IS ENROLLED CLUB:  ", member.clubs);
+    console.log("IS ENROLLED CLUB:  ", member.clubs.length);
+    console.log("member:  ", member);
+
+    if (member) {
+      if (member.clubs.length > 0) {
+        res.json({
+          error: true,
+          clubName: member.clubs,
+          length: member.clubs.length,
+        });
+      } else {
+        res.json({
+          error: false,
+          length: member.clubs.length,
+        });
+      }
+    } else {
+      res.json({
+        error: false,
+      });
+    } /*
+    if (member.clubs.length > 0) {
+      res.json({
+        error: true,
+        clubName: member.clubs,
+      });
+    }
+  } else {
+    res.json({
+      error: false,
+    });
+  }*/
+  }
+};
+
 const isEnrolled = async (req, res, next) => {
   console.log("IS ENROLLED:  ", req.user.UID);
 
@@ -866,7 +916,7 @@ const findControllers = async (req, res) => {
   try {
     const clubs = await cModel.find();
     if (clubs) {
-      // console.log("CLUBS: ", clubs);
+      console.log("CLUBS: ", clubs);
       res.json(clubs);
     } else {
       res.json({});
@@ -1006,11 +1056,11 @@ const borrowGeneral = async (req, res) => {
 const updateCArray = async (req, res) => {
   const decode = jwt.decode(req.cookies.access_token);
   try {
-    const newClub = req.query.newC;
+    const newClub = req.query.clubTitle;
     const frontend_url = req.query.frontend_url;
     const backend_url = req.query.backend_url;
 
-    console.log(newClub, frontend_url, backend_url);
+    console.log("NEW CLUB INFO", newClub, frontend_url, backend_url);
 
     const updatedClubs = await U.findOneAndUpdate({
       $push: {
@@ -1031,15 +1081,17 @@ const updateCArray = async (req, res) => {
 };
 
 const checkDuesForStats = async (req, res) => {
-  const redirect_b = req;
+  const redirect_b = req.query.backend;
+  console.log("REDIRECT IN CHCEK DUES FOR STATS");
+  // console.log("REDIRECT IN CHCEK DUES FOR STATS", req);
   let status = false;
   const token = req.cookies.access_token;
   // console.log("TOKEN IN FTQ:  ", token);
   const decodedToken = jwt.decode(token);
-  console.log("url IN CHECK DUES FOR STATS:", req.query.b_url);
+  console.log("url IN CHECK DUES FOR STATS:", req.query.backend);
   try {
     const borrowingUserfromClub = await axios
-      .get(`${req.query.b_url}/paid-dues-check`, { params: { token } })
+      .get(`${req.query.backend}/check-dues`, { params: { token } })
       .then(async (res) => {
         console.log("RES IN CHECK DUES FOR STATS:", res.data);
         status = res.data.paidDues;
@@ -1069,6 +1121,11 @@ const totalAdmins = async (req, res) => {
   }
 };
 
+const checkEnrollmentPriorToRedirect = async (req, res) => {
+  console.log("REQ IN ENROLLMENT:", req.query);
+  res.json({ msg: true });
+};
+
 module.exports = {
   test,
   firstTimeQ,
@@ -1093,4 +1150,6 @@ module.exports = {
   checkDuesForStats,
   totalController,
   totalAdmins,
+  checkEnrollmentPriorToRedirect,
+  isEnrolledClub,
 };

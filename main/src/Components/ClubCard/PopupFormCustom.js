@@ -13,7 +13,7 @@ const PopupFormCustom = (props) => {
   const frontend_url = props.frontend_url;
   const clubTitle = props.title;
   const clubLender = props.clubLender;
-  const clubLenderURL = clubLender.redirect_b;
+  const clubLenderURL = props.clubLender;
   const [open, setOpen] = useState(false);
   const [questions, setQuestions] = useState([{}]);
   const [formData, setFormData] = useState({

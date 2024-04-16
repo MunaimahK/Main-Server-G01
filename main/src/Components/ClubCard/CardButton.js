@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@mui/material";
+import { Button, ButtonBase } from "@mui/material";
 import PopupFormGeneral from "./PopupFormGeneral";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -10,54 +10,73 @@ import PopupFormCustom from "./PopupFormCustom";
 //    1. Borrow General Question Answers from the other club
 //    2. After that prompt the pop up for custom questions
 const CardButton = (props) => {
+  const [clubState, setClubState] = useState({});
+  const Enrolled = props.enrolled;
+  console.log("CARD BUTTON PROPS.ENROLLED", props.enrolled);
+
   const [firstEnrollment, setFirstEnrollment] = useState(true);
   const [firstClub, setFirstClub] = useState({});
+  const [enrolled, setEnrolled] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [showPopupCustom, setShowPopupCustom] = useState(false);
-  const joinClub = async () => {
-    console.log("Join Club");
-    try {
-      const check = await axios.get("/isEnrolled").then((res) => {
-        console.log("Is Enrolled", res.data.error);
-        console.log("Is Enrolled", res);
-        if (res.data.length > 0) {
-          setFirstEnrollment(false);
-          setShowPopupCustom(true);
-          setFirstClub(res.data.clubName[0]);
-        } else {
-          // setFirstEnrollment(true);
-        }
-        // setFirstEnrollment(true);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const f_url = props.frontend_url;
+  const b_url = props.backend_url;
+  const c_name = props.title;
 
-  const handleButtonClick = () => {
-    // If it's the first enrollment, render PopupFormGeneral
-    // If not, you might want to render something else or nothing
-    console.log("FirstEnrollment", firstEnrollment);
-    if (firstEnrollment) {
-      setShowPopup(true);
+  const handleButtonClick = async () => {
+    let i = 0;
+    if (props.enrolled.length > 0) {
+      setFirstEnrollment(false);
+      setFirstClub(props.enrolled[0].redirect_b);
+      for (i = 0; i < props.enrolled.length; i++) {
+        console.log("club name index in carbutton", props.enrolled[i].clubName);
+        if (props.enrolled[i].clubName === props.title) {
+          console.log("name matches");
+          setShowPopupCustom(false);
+          window.location.replace(props.frontend_url);
+        } else {
+          console.log("name does not match");
+          setShowPopupCustom(true);
+        }
+      }
     } else {
-      setShowPopupCustom(true);
+      setFirstEnrollment(true);
+      setShowPopupCustom(false);
+      setShowPopup(true);
     }
-    // Return null or render something else based on your logic
-    return null;
   };
   const handleClosePopup = () => {
     // Close the popup
     setShowPopup(false);
     setShowPopupCustom(false);
   };
+  const renderButton = () => {
+    if (showPopupCustom) {
+      return (
+        <PopupFormCustom
+          status={firstEnrollment}
+          onClose={handleClosePopup}
+          backend_url={props.backend_url}
+          frontend_url={props.frontend_url}
+          title={props.title}
+          clubLender={firstClub}
+        />
+      );
+    }
 
-  useEffect(() => {
-    console.log("SHOW CUSTOM:", showPopupCustom);
-    console.log("triggered");
+    if (showPopup) {
+      return (
+        <PopupFormGeneral
+          status={firstEnrollment}
+          onClose={handleClosePopup}
+          backend_url={props.backend_url}
+          frontend_url={props.frontend_url}
+          title={props.title}
+        />
+      );
+    }
+  };
 
-    joinClub();
-  }, []);
   return (
     <div>
       <Button
@@ -79,26 +98,7 @@ const CardButton = (props) => {
       >
         Let's Go!
       </Button>
-      {firstEnrollment
-        ? showPopup && (
-            <PopupFormGeneral
-              status={firstEnrollment}
-              onClose={handleClosePopup}
-              backend_url={props.backend_url}
-              frontend_url={props.frontend_url}
-              title={props.title}
-            />
-          )
-        : showPopupCustom && (
-            <PopupFormCustom
-              status={firstEnrollment}
-              onClose={handleClosePopup}
-              backend_url={props.backend_url}
-              frontend_url={props.frontend_url}
-              title={props.title}
-              clubLender={firstClub}
-            />
-          )}
+      <div>{renderButton()}</div>
     </div>
   );
 };

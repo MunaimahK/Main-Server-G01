@@ -39,17 +39,17 @@ const PromoteAdmin = () => {
           <div>
             <input
               type="text"
-              placeholder="Club Name"
+              placeholder="Member UID"
               value={data.UID || ""}
               onChange={(e) => setData({ ...data, UID: e.target.value })}
             />
             <input
-              placeholder="Club URL"
+              placeholder="Member Name"
               value={data.name || ""}
               onChange={(e) => setData({ ...data, name: e.target.value })}
             />
             <input
-              placeholder="Codebase URL"
+              placeholder="Member Email"
               value={data.email || ""}
               onChange={(e) => setData({ ...data, email: e.target.value })}
             />
