@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+
+  mongo:
+    image: mongo
+    ports:
+     - "27017:27017"
+    volumes:
+     - ./data:/data/db 
+
+  backend:
+    build: 
+      context: ./api   # Specify the path to the directory containing the Dockerfile
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URL=mongo:27017/Influx-main
+      - DB_NAME=Influx-main
+
+  frontend:
+    build: 
+      context: ./main   # Specify the path to the directory containing the Dockerfile for the frontend
+      dockerfile: Dockerfile
+    stdin_open: true
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
