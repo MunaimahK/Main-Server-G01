@@ -56,9 +56,25 @@ try {
   console.log("Connected");
 } catch (error) {
   handleError(error);
-}
+} /*
+const connectWithRetry = async () => {
+  try {
+    await mongoose.connect(`mongodb://mongo:27017/${process.env.DB_NAME}`, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("Connected to MongoDB");
+    console.log(process.env.DB_NAME);
+  } catch (err) {
+    console.error("Failed to connect to MongoDB:", err);
+    // Retry connection after a delay (e.g., 5 seconds)
+    setTimeout(connectWithRetry, 5000);
+  }
+};
+
+connectWithRetry();*/
 
 // -Start the server-------------------------------------------------------------------------------------
-app.listen(3001, () => {
+app.listen(process.env.PORT, () => {
   console.log("Server is running");
 });
