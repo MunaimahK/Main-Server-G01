@@ -16,6 +16,19 @@
   color: white;
 }
 
+.header-front {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: rgb(19, 30, 37);
+  z-index: 1000; /* Ensure it's above other content */
+  transition: top 0.3s; /* Smooth transition when hiding/showing */
+}
+
+.home-faq {
+  margin-top: 10vh; /* Adjust based on the height of the navbar */
+}
+
 ul {
   list-style-type: none;
   text-decoration: none;
