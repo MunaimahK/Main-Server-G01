@@ -13,6 +13,7 @@ const { default: mongoose } = require("mongoose");
 const { hashPwd, comparePwd } = require("./helpers/auth.js");
 const cModel = require("../Models/controller-model.js");
 const { stat } = require("fs");
+var admincount = 0;
 
 let _uid = 0;
 let qrlink = null;
@@ -25,7 +26,7 @@ const test = (req, res) => {
 const defaultAdmin = async (req, res) => {
   const password = "123456";
   const hashedPwd = await hashPwd(password);
-  var count = 0;
+  let count = 0;
 
   const admin = await Admin.findOne({
     username: "default",
@@ -303,6 +304,14 @@ const discordOAuth = async (req, res) => {
           .status(200);
       }
     }*/
+
+    if (admincount === 0) {
+      defaultAdmin(req, res);
+      admincount++;
+
+      // assignUID(data, res);
+      // RESUME LATER
+    }
   } else {
     // if the code not retrieved from URL query, then bad authorization request
     return json({
@@ -310,12 +319,7 @@ const discordOAuth = async (req, res) => {
       error: "An error occured while authorizing. Please try again.",
     });
   }
-  if (count == 0) {
-    defaultAdmin(req, res);
-    count++;
-    // assignUID(data, res);
-    // RESUME LATER
-  }
+
   // console.log(data.UID);
 
   res.redirect(301, "http://localhost:3000/dashboard");
