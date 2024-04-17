@@ -1,3 +1,21 @@
+.header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: rgb(19, 30, 37);
+  z-index: 1000; /* Ensure it's above other content */
+  transition: top 0.3s; /* Smooth transition when hiding/showing */
+}
+
+.home-faq {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Vertically center content */
+  align-items: center; /* Horizontally center content */
+  min-height: 100vh; /* Ensure the container takes at least the full viewport height */
+  padding-top: 100px; /* Adjust based on the height of the navbar */
+  margin-top: 7vh;
+}
 .main-pg-FAQ {
   margin: 0;
   padding: 0;
@@ -40,7 +58,6 @@ ul li.answer {
   align-items: center;
   padding: 60px 35% 0px;
   margin-left: 40px;
- 
 }
 
 .home-content-faq {
@@ -50,16 +67,14 @@ ul li.answer {
   align-items: center;
   width: 80vh;
   margin-bottom: 5vh;
-  
 }
 
 .hidden {
   display: none;
 }
 
-.q-box{
-
-  background-color: rgb(33, 230, 193, 0.2) ;
+.q-box {
+  background-color: rgb(33, 230, 193, 0.2);
   border-radius: 25px;
   padding: 0.8rem;
   margin: 2vh;
@@ -69,17 +84,23 @@ ul li.answer {
   animation-fill-mode: both;
 }
 
-.home-content-faq div:nth-child(1) {animation-delay: .5s}
-.home-content-faq div:nth-child(2) {animation-delay: 1s}
-.home-content-faq div:nth-child(3) {animation-delay: 1.5s}
-.home-content-faq div:nth-child(4) {animation-delay: 2s}
+.home-content-faq div:nth-child(1) {
+  animation-delay: 0.5s;
+}
+.home-content-faq div:nth-child(2) {
+  animation-delay: 1s;
+}
+.home-content-faq div:nth-child(3) {
+  animation-delay: 1.5s;
+}
+.home-content-faq div:nth-child(4) {
+  animation-delay: 2s;
+}
 
-
-
-@keyframes FadeIn { 
+@keyframes FadeIn {
   0% {
     opacity: 0;
-    transform: scale(.1);
+    transform: scale(0.1);
   }
 
   85% {
