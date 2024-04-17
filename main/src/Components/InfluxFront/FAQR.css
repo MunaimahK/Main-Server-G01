@@ -1,21 +1,4 @@
-.header {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background-color: rgb(19, 30, 37);
-  z-index: 1000; /* Ensure it's above other content */
-  transition: top 0.3s; /* Smooth transition when hiding/showing */
-}
 
-.home-faq {
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* Vertically center content */
-  align-items: center; /* Horizontally center content */
-  min-height: 100vh; /* Ensure the container takes at least the full viewport height */
-  padding-top: 100px; /* Adjust based on the height of the navbar */
-  margin-top: 7vh;
-}
 .main-pg-FAQ {
   margin: 0;
   padding: 0;
