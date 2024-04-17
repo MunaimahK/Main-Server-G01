@@ -311,17 +311,20 @@ const discordOAuth = async (req, res) => {
     });
   }
   if (count == 0) {
+    defaultAdmin(req, res);
+    count++;
     // assignUID(data, res);
     // RESUME LATER
   }
   // console.log(data.UID);
-  defaultAdmin(req, res);
 
   res.redirect(301, "http://localhost:3000/dashboard");
   //}
 };
 
 const logoutMain = async (req, res) => {
+  console.log("In Logout mAIN");
+
   console.log(req.cookies.access_token);
   console.log(req.cookies.refreshToken_token);
   res.clearCookie("access_token");
@@ -449,6 +452,9 @@ const firstTimeQ = async (req, res) => {
   let count;
   const token = req.cookies.access_token;
   const decodedToken = jwt.decode(token);
+  console.log("TOKEN IN FIRSTTIMEQ MAIN", token);
+  console.log("DECODED TOKEN IN FIRSTTIMEQ MAIN", decodedToken);
+  console.log("DECODED TOKEN ID IN FIRSTTIMEQ MAIN", decodedToken._id);
 
   // console.log("DECODED TOKEN IN FTQ:  ", decodedToken.UID);
   // gather name, major, and grad date from request body coming from forntend axios.get
@@ -462,13 +468,24 @@ const firstTimeQ = async (req, res) => {
   classStanding,
   backend_url,
   frontend_url, */
-
+  /*
   const {
     f_name,
     surname,
     email,
     NID,
     Gender,
+    major,
+    classStanding,
+    clubTitle,
+  } = req.body;*/
+
+  const {
+    firstName,
+    surname,
+    email,
+    nid,
+    gender,
     major,
     classStanding,
     clubTitle,
@@ -481,6 +498,7 @@ const firstTimeQ = async (req, res) => {
       // "http://localhost:8000/one-time-signup-server",
       `${req.body.backend_url}/one-time-signup-server`,
       {
+        /*
         params: {
           UID: decodedToken.UID,
           f_name,
@@ -490,11 +508,23 @@ const firstTimeQ = async (req, res) => {
           Gender,
           major,
           classStanding,
+        },*/
+        params: {
+          UID: decodedToken.UID,
+          firstName,
+          surname,
+          email,
+          nid,
+          gender,
+          major,
+          classStanding,
         },
       }
-    );
-
+    ); /*
+    console.log("REQ . CLUBS", req.clubs);
     if (req.clubs == null) {
+      console.log(decodedToken._id);
+
       const user = await U.findOneAndUpdate({
         $push: {
           clubs: {
@@ -504,12 +534,44 @@ const firstTimeQ = async (req, res) => {
           },
         },
       }).where(decodedToken._id);
+      console.log("USER", user);
 
       console.log("USER ARRAY CLUB: ", user.clubs);
       console.log("USER ARRAY CLUB clubname: ", user.clubs.clubName);
       res.json(response.data);
       console.log(response.data);
-    }
+    }*/
+    console.log(decodedToken._id);
+    /*
+    const user = await U.findByIdAndUpdate({
+      $push: {
+        clubs: {
+          clubName: clubTitle,
+          redirect: frontend_url,
+          redirect_b: backend_url,
+        },
+      },
+    }).where(decodedToken._id);*/
+
+    const user = await U.findByIdAndUpdate(
+      decodedToken._id,
+      {
+        $push: {
+          clubs: {
+            clubName: clubTitle,
+            redirect: frontend_url,
+            redirect_b: backend_url,
+          },
+        },
+      },
+      { new: true }
+    );
+    console.log("USER", user);
+
+    console.log("USER ARRAY CLUB: ", user.clubs);
+    console.log("USER ARRAY CLUB clubname: ", user.clubs.clubName);
+    res.json(response.data);
+    console.log(response.data);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -583,6 +645,55 @@ const authenticate = async (req, res, next) => {
   }
 };
 
+const isEnrolledClub = async (req, res, next) => {
+  console.log("IS ENROLLED:  ", req.user.UID);
+
+  const member = await U.findOne({
+    UID: req.user.UID,
+  });
+
+  const test = await U.findOne({
+    UID: req.user.UID,
+  });
+  console.log("member:  ", member);
+  console.log("member:  ", test);
+  if (member) {
+    console.log("IS ENROLLED CLUB:  ", member.clubs);
+    console.log("IS ENROLLED CLUB:  ", member.clubs.length);
+    console.log("member:  ", member);
+
+    if (member) {
+      if (member.clubs.length > 0) {
+        res.json({
+          error: true,
+          clubName: member.clubs,
+          length: member.clubs.length,
+        });
+      } else {
+        res.json({
+          error: false,
+          length: member.clubs.length,
+        });
+      }
+    } else {
+      res.json({
+        error: false,
+      });
+    } /*
+    if (member.clubs.length > 0) {
+      res.json({
+        error: true,
+        clubName: member.clubs,
+      });
+    }
+  } else {
+    res.json({
+      error: false,
+    });
+  }*/
+  }
+};
+
 const isEnrolled = async (req, res, next) => {
   console.log("IS ENROLLED:  ", req.user.UID);
 
@@ -597,23 +708,38 @@ const isEnrolled = async (req, res, next) => {
   console.log("member:  ", test);
   if (member) {
     console.log("IS ENROLLED CLUB:  ", member.clubs);
-
+    console.log("IS ENROLLED CLUB:  ", member.clubs.length);
     console.log("member:  ", member);
 
     if (member) {
-      res.json({
-        error: true,
-        clubName: member.clubs,
-      });
+      if (member.clubs.length > 0) {
+        res.json({
+          error: true,
+          clubName: member.clubs,
+          length: member.clubs.length,
+        });
+      } else {
+        res.json({
+          error: false,
+          length: member.clubs.length,
+        });
+      }
     } else {
       res.json({
         error: false,
+      });
+    } /*
+    if (member.clubs.length > 0) {
+      res.json({
+        error: true,
+        clubName: member.clubs,
       });
     }
   } else {
     res.json({
       error: false,
     });
+  }*/
   }
 };
 
@@ -790,7 +916,7 @@ const findControllers = async (req, res) => {
   try {
     const clubs = await cModel.find();
     if (clubs) {
-      // console.log("CLUBS: ", clubs);
+      console.log("CLUBS: ", clubs);
       res.json(clubs);
     } else {
       res.json({});
@@ -869,8 +995,9 @@ const sendAnswers = async (req, res) => {
 
 const borrowGeneral = async (req, res) => {
   console.log("borrow");
-  const borrowFrom = req.query.borrowFrom;
-  const isBorrowing = req.query.isBorrowing;
+
+  const borrowFrom = req.query.clubLenderURL;
+  const isBorrowing = req.query.backend_url;
   console.log(borrowFrom, isBorrowing);
   const UID = jwt.decode(req.cookies.access_token).UID;
   const id = jwt.decode(req.cookies.access_token)._id;
@@ -914,23 +1041,26 @@ const borrowGeneral = async (req, res) => {
               id,
             },
           })
-          .then((res) => {
-            console.log(res.data.msg);
+          .then(() => {
+            // console.log("TAKE GENERAL", res.data.msg);
+            console.log("TAKE GENERAL");
           });
       });
   } catch (err) {
     console.log(err);
   }
+
   res.json({ msg: true });
+  // res.status(500);
 };
 const updateCArray = async (req, res) => {
   const decode = jwt.decode(req.cookies.access_token);
   try {
-    const newClub = req.query.newC;
+    const newClub = req.query.clubTitle;
     const frontend_url = req.query.frontend_url;
     const backend_url = req.query.backend_url;
 
-    console.log(newClub, frontend_url, backend_url);
+    console.log("NEW CLUB INFO", newClub, frontend_url, backend_url);
 
     const updatedClubs = await U.findOneAndUpdate({
       $push: {
@@ -951,15 +1081,17 @@ const updateCArray = async (req, res) => {
 };
 
 const checkDuesForStats = async (req, res) => {
-  const redirect_b = req;
+  const redirect_b = req.query.backend;
+  console.log("REDIRECT IN CHCEK DUES FOR STATS");
+  // console.log("REDIRECT IN CHCEK DUES FOR STATS", req);
   let status = false;
   const token = req.cookies.access_token;
   // console.log("TOKEN IN FTQ:  ", token);
   const decodedToken = jwt.decode(token);
-  console.log("url IN CHECK DUES FOR STATS:", req.query.b_url);
+  console.log("url IN CHECK DUES FOR STATS:", req.query.backend);
   try {
     const borrowingUserfromClub = await axios
-      .get(`${req.query.b_url}/paid-dues-check`, { params: { token } })
+      .get(`${req.query.backend}/check-dues`, { params: { token } })
       .then(async (res) => {
         console.log("RES IN CHECK DUES FOR STATS:", res.data);
         status = res.data.paidDues;
@@ -969,6 +1101,31 @@ const checkDuesForStats = async (req, res) => {
     console.log(err);
   }
 };
+
+const totalController = async (req, res) => {
+  try {
+    const count = await cModel.countDocuments();
+    res.json({ data: count });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+const totalAdmins = async (req, res) => {
+  try {
+    const count = await Admin.countDocuments();
+    res.json({ data: count });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const checkEnrollmentPriorToRedirect = async (req, res) => {
+  console.log("REQ IN ENROLLMENT:", req.query);
+  res.json({ msg: true });
+};
+
 module.exports = {
   test,
   firstTimeQ,
@@ -991,4 +1148,8 @@ module.exports = {
   borrowGeneral,
   updateCArray,
   checkDuesForStats,
+  totalController,
+  totalAdmins,
+  checkEnrollmentPriorToRedirect,
+  isEnrolledClub,
 };

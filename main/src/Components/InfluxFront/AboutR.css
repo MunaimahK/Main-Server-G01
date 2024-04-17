@@ -1,0 +1,57 @@
+.main-pg-about {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto Mono", monospace;
+  /*background-color: var(--darkest);*/
+  background: radial-gradient(
+    circle at 0% 99.2%,
+    rgb(255, 124, 0) 0%,
+    rgb(255, 124, 0) 15.9%,
+    rgb(255, 163, 77) 15.9%,
+    rgb(255, 163, 77) 24.4%,
+    rgb(19, 30, 37) 24.5%,
+    rgb(19, 30, 37) 66%
+  );
+  color: white;
+}
+
+.home-about {
+  position: relative;
+  width: 100vh;
+  height: 100vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 60px 35% 0px;
+  margin-left: 0px;
+}
+
+.home-content-about {
+  max-width: 600px;
+  position: absolute;
+  font-size: 16px;
+  margin-left: 5vh;
+}
+
+.header-front {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px 10%;
+  background: transparent;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  text-decoration: none;
+}
+.header-front .logo {
+  font-size: 25px;
+  color: aliceblue;
+  text-decoration: none;
+  cursor: default;
+  opacity: 0;
+  animation: slideRight 1s ease forwards;
+}

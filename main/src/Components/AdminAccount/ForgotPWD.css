@@ -1,0 +1,115 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+}
+
+:root {
+  --darkest: #011023;
+  --middle: #1f4287;
+  --light: #278ea5;
+  --accent: #21e6c1;
+  --white: rgb(255, 255, 255);
+  --orangedeep: rgb(255, 124, 0);
+  --orangelight: rgb(255, 163, 77);
+  --new: #071221;
+}
+
+.body-sign-in {
+  background-color: white;
+  background: linear-gradient(to right, var(--darkest), var(--new));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.container-sign-in {
+  background-color: #fff;
+  border-radius: 30px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+  position: relative;
+  overflow: hidden;
+  width: 768px;
+  max-width: 100%;
+  min-height: 480px;
+}
+
+.form-container-2 {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: 100%;
+  transition: all 0.6s ease-in-out;
+}
+
+.border {
+  background-color: var(--orangelight);
+  height: 100%;
+  opacity: 1;
+  background: linear-gradient(to right, var(--orangedeep), var(--orangelight));
+  color: #fff;
+  position: relative;
+  left: -100%;
+  height: 100%;
+  width: 200%;
+}
+
+.border-container {
+  position: absolute;
+  top: 0;
+  left: 0%;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  transition: all 0.6s ease-in-out;
+  border-radius: 0 80px 80px 0;
+  z-index: 1000;
+}
+
+.border-panel {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 30px;
+  text-align: center;
+  top: 0;
+  transform: translateX(0);
+  transition: all 0.6s ease-in-out;
+  color: white;
+}
+
+.back-arrow {
+  position: absolute;
+  top: 20px; /* Adjust as needed */
+  left: 20px; /* Adjust as needed */
+  z-index: 999;
+}
+.arrow {
+  border: solid rgb(255, 255, 255);
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+  float: left;
+  transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+  margin-right: 10px;
+}
+
+.body-sign-in .left {
+  transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+}
+
+/* Animate button issue#25 
+.container-sign-in button:hover {
+}
+*/

@@ -1,0 +1,23 @@
+.wrapper-dues-stats {
+  background-color: aliceblue;
+  border: 3px solid rgb(221, 192, 6);
+  border-radius: 15px;
+  box-shadow: 5px 5px 5px hsl(0, 0%, 0% 0.1);
+  padding: 20px;
+  margin: 10px;
+  width: 20vh;
+  height: 80%;
+  text-align: center;
+  max-width: 50vh;
+  justify-content: space-around;
+  display: inline-block;
+  /* makes the div appear on rigth side of page*/
+  position: absolute;
+  right: 0;
+}
+
+.title {
+  color: rgb(12, 25, 59);
+  font-size: 20px;
+  font-weight: bold;
+}
