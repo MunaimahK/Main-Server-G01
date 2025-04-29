@@ -9,6 +9,31 @@ const cors = require("cors");
 const { error } = require("console");
 const cookieParser = require("cookie-parser");
 const router = express.Router();
+const Admin = require("./Models/admin-model.js");
+
+const port = process.env.PORT || 3001;
+
+async function ensureDefaultAdmin() {
+  const password = "123456";
+
+  const existingAdmin = await Admin.findOne({ username: "default" });
+
+  if (!existingAdmin) {
+    try {
+      const defAdmin = new Admin({
+        username: "default",
+        password: password,
+      });
+      await defAdmin.save();
+      console.log("Default admin created.");
+    } catch (err) {
+      console.error("Failed to create default admin:", err);
+    }
+  } else {
+    console.log("ℹ️ Default admin already exists.");
+  }
+}
+
 
 // -Middleware------------------------------------------------------------------------------------------------------------
 const app = express();
@@ -51,7 +76,12 @@ app.use("/", require("./Routes/routes"));
 
 // -Connect to MongoDB Inlfux-main DB-------------------------------------------------------------------------------------
 try {
-  mongoose.connect("mongodb://localhost:27017/Influx-main");
+  // mongoose.connect("mongodb://localhost:27017/Influx-main");
+  mongoose.connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+  
   const db = mongoose.connection;
   console.log("Connected");
 } catch (error) {
@@ -73,8 +103,9 @@ const connectWithRetry = async () => {
 };
 
 connectWithRetry();*/
-
 // -Start the server-------------------------------------------------------------------------------------
-app.listen(process.env.PORT, () => {
+app.listen(port, async() => {
   console.log("Server is running");
+  console.log(process.env.PORT);
+  await ensureDefaultAdmin();
 });

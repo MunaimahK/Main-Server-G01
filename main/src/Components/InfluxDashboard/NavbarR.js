@@ -10,12 +10,18 @@ const NavbarR = ({ show }) => {
   const logOut = async () => {
     console.log("IN LOG OUT");
     try {
-      const data = await axios.get("/logout/influx").then((res) => {
-        console.log("LOGOUT", res);
-        navigate("/influx");
-      });
+      // Sending the logout request
+      await axios.get("/logout/influx")
+        .then((res) => {
+          console.log("LOGOUT SUCCESS", res);
+          // After successful logout, navigate to the desired page (influx dashboard or home)
+          navigate("/influx");
+        })
+        .catch((err) => {
+          console.log("LOGOUT ERROR", err);
+        });
     } catch (err) {
-      console.log(err);
+      console.log("ERROR", err);
     }
   };
   return (
@@ -33,7 +39,7 @@ const NavbarR = ({ show }) => {
           </a>
         </li>
         <li className="nav-li">
-          <button className="lg-out-button" onClick={logOut}>
+        <button className="lg-out-button" onClick={logOut}>
             Log Out
           </button>
         </li>

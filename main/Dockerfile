@@ -1,28 +1,20 @@
-# Use an official Node.js runtime as a parent image
-FROM node:20-alpine
+# Use the official Node.js image as the base image
+FROM node:18
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
-# COPY package*.json ./
-COPY . /app
+# Copy the package.json and package-lock.json (if present)
+COPY package*.json ./
 
-# Install Python and necessary build tools
-# RUN apk add --no-cache python3 make g++
 # Install dependencies
-RUN npm install --force
+RUN npm install
 
+# Copy the rest of the application code
+COPY . .
 
-# Bundle app source
-# COPY . .
-
-# Define environment variables
-#ENV NODE_ENV=production
-ENV PORT=3000
-
-# Expose the port your app runs on
+# Expose the port your app will run on
 EXPOSE 3000
 
-# Run the application
+# Start the application
 CMD ["npm", "start"]

@@ -5,7 +5,7 @@ const Admin = mongoose.Schema(
     password: { type: String },
   },
   {
-    collection: "admin",
+    collection: "influxAdmins",
   }
 );
 // string cheese

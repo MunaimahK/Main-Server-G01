@@ -3,11 +3,11 @@ import { ChevronFirst } from "lucide-react";
 import logo from "./influx-logo.png";
 import "./AdminNavR.css";
 
-import HomeIcon from "@material-ui/icons/Home";
-import EventNoteIcon from "@material-ui/icons/EventNote";
-import SettingsEthernetIcon from "@material-ui/icons/SettingsEthernet";
-import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import HomeIcon from '@mui/icons-material/Home';
+import EventNoteIcon from '@mui/icons-material/EventNote';
+import SettingsEthernetIcon from '@mui/icons-material/SettingsEthernet';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import AdminNav from "../Recycle/AdminNav";
 

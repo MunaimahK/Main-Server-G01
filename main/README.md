@@ -2,6 +2,12 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Pre-Requisites
+Run `npm install --legacy-peer-deps` since there is dependency on material UI
+Install materialUI packages
+`npm install react@17 react-dom@17 --legacy-peer-deps`
+`npm install @material-ui/core@4.12.4 @material-ui/icons@4.11.3 --legacy-peer-deps`
+
 ## Available Scripts
 
 In the project directory, you can run:
