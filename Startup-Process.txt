@@ -1,0 +1,229 @@
+Run nmp install in main folder
+run npm install --legacy-peer-deps since there is dependency on material UI
+Yes, you can deploy all the nodes (main server and n number of clubs) onto a single AWS EC2 instance using Docker and GitHub Actions. Here’s a high-level overview of how you could approach this, and the individual components involved:
+
+1. Overview of Deployment Strategy
+You will deploy all the services (main server + multiple clubs) as Docker containers on a single EC2 instance. Here's how you can organize the deployment:
+
+Main Server: The main server will run its own backend and frontend services.
+
+Clubs: Each club will have its own backend and frontend. These can be Dockerized and run in separate containers.
+
+MongoDB: The MongoDB service will be shared by all the clubs but run in its own container.
+
+You will use Docker Compose to orchestrate the services, and GitHub Actions to automate the deployment process.
+
+2. Steps for Deployment
+Let’s break this down into concrete steps:
+
+Step 1: Set Up the AWS EC2 Instance
+Create an EC2 instance: Launch an EC2 instance (e.g., using Ubuntu or Amazon Linux) with sufficient resources for your project.
+
+SSH into the instance: Use SSH to access the instance from your local machine.
+
+Install Docker: Install Docker on the EC2 instance if it's not already installed.
+
+For Ubuntu, run:
+
+bash
+Copy
+Edit
+sudo apt update
+sudo apt install docker.io
+sudo systemctl enable --now docker
+Install Docker Compose: Install Docker Compose on the EC2 instance.
+
+bash
+Copy
+Edit
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+Install Git: If you’re cloning from GitHub, install Git.
+
+bash
+Copy
+Edit
+sudo apt install git
+Step 2: GitHub Actions CI/CD Pipeline
+You can automate the deployment process using GitHub Actions. The workflow will involve:
+
+Building your Docker images from your GitHub repositories.
+
+Pushing the Docker images to Docker Hub (or AWS ECR if you prefer).
+
+SSHing into your EC2 instance to pull the latest Docker images and restart your containers.
+
+Here’s how you can set it up:
+
+1. GitHub Actions Workflow
+Create a .github/workflows/deploy.yml file in your main server's repository.
+
+yaml
+Copy
+Edit
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main  # Trigger deployment when changes are pushed to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push backend image
+        run: |
+          docker build -t your-dockerhub-username/main-server-backend ./backend
+          docker push your-dockerhub-username/main-server-backend
+
+      - name: Build and push frontend image
+        run: |
+          docker build -t your-dockerhub-username/main-server-frontend ./frontend
+          docker push your-dockerhub-username/main-server-frontend
+
+      - name: Build and push club images
+        run: |
+          for CLUB in club-a club-b; do
+            docker build -t your-dockerhub-username/${CLUB}-backend ./clubs/${CLUB}/backend
+            docker build -t your-dockerhub-username/${CLUB}-frontend ./clubs/${CLUB}/frontend
+            docker push your-dockerhub-username/${CLUB}-backend
+            docker push your-dockerhub-username/${CLUB}-frontend
+          done
+
+      - name: Deploy to EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_PRIVATE_KEY }} ec2-user@${{ secrets.EC2_PUBLIC_IP }} << EOF
+            cd /path/to/your/project
+            docker-compose pull
+            docker-compose up -d
+          EOF
+        env:
+          EC2_SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          EC2_PUBLIC_IP: ${{ secrets.EC2_PUBLIC_IP }}
+Explanation of the Workflow:
+Checkout Code: This step checks out your code from GitHub so it can be used to build Docker images.
+
+Set up Docker Buildx: Enables multi-platform builds.
+
+Login to Docker Hub: Uses the credentials stored in GitHub Secrets (you’ll need to add DOCKER_USERNAME and DOCKER_PASSWORD in your GitHub repo secrets).
+
+Build and Push Docker Images: Builds the backend and frontend Docker images for the main server and clubs, then pushes them to Docker Hub.
+
+Deploy to EC2: SSHs into your EC2 instance, pulls the latest Docker images, and restarts the containers using Docker Compose.
+
+Secrets Configuration:
+DOCKER_USERNAME and DOCKER_PASSWORD: Docker Hub credentials.
+
+EC2_SSH_PRIVATE_KEY: Your EC2 private SSH key (stored in GitHub Secrets).
+
+EC2_PUBLIC_IP: The public IP address of your EC2 instance.
+
+Step 3: Set Up Docker Compose on EC2
+On your EC2 instance, you should have a Docker Compose file that orchestrates all the services (main server and clubs). You can use the generated docker-compose.yml from earlier, which would look something like this:
+
+yaml
+Copy
+Edit
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data:/data/db
+    restart: unless-stopped
+
+  backend:
+    image: your-dockerhub-username/main-server-backend
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/main-server
+      - DB_NAME=main-server
+    restart: unless-stopped
+
+  frontend:
+    image: your-dockerhub-username/main-server-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  club-a-backend:
+    image: your-dockerhub-username/club-a-backend
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/club-a
+      - DB_NAME=club-a
+    restart: unless-stopped
+
+  club-a-frontend:
+    image: your-dockerhub-username/club-a-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - club-a-backend
+    restart: unless-stopped
+
+  club-b-backend:
+    image: your-dockerhub-username/club-b-backend
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/club-b
+      - DB_NAME=club-b
+    restart: unless-stopped
+
+  club-b-frontend:
+    image: your-dockerhub-username/club-b-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - club-b-backend
+    restart: unless-stopped
+Make sure that the docker-compose.yml on your EC2 instance matches the one generated dynamically by the script.
+
+Step 4: Run the Workflow
+Once you push to your GitHub repository, the GitHub Action will:
+
+Build and push the Docker images.
+
+SSH into the EC2 instance.
+
+Pull the latest images and start/restart the containers with Docker Compose.
+
+Benefits of This Approach:
+Automation: GitHub Actions automates the deployment, saving time and reducing the potential for human error.
+
+Scalability: You can add more clubs by updating the GitHub Actions workflow with new club repositories.
+
+Centralized Management: All your services (main server and clubs) run on a single EC2 instance with Docker containers, making it easier to manage.
+
+Security: You can use secrets for managing sensitive data like Docker Hub credentials and SSH keys.
+
+Conclusion
+This setup will allow you to deploy all the services (main server and clubs) onto a single EC2 instance using Docker and GitHub Actions. It ensures a smooth and automated deployment process that you can scale with more clubs in the future.

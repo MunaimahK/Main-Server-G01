@@ -63,13 +63,13 @@ const FrontPage = () => {
 
           <p>The one stop UCF community networking platform</p>
           <div class="socials">
-            <a href="/insta">
+            <a href="https://github.com/MunaimahK">
               <box-icon class="insta" name="instagram" type="logo"></box-icon>
             </a>
-            <a href="/twitter">
+            <a href="https://github.com/MunaimahK/Main-Server-G01">
               <box-icon class="twitter" name="twitter" type="logo"></box-icon>
             </a>
-            <a href="/linkedin">
+            <a href="https://www.linkedin.com/in/munaimah-khan-13ab20230/">
               <box-icon class="linkedin" name="linkedin" type="logo"></box-icon>
             </a>
           </div>

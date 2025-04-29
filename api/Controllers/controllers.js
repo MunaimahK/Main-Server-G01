@@ -14,7 +14,7 @@ const { hashPwd, comparePwd } = require("./helpers/auth.js");
 const cModel = require("../Models/controller-model.js");
 const { stat } = require("fs");
 var admincount = 0;
-
+// https://discord.com/oauth2/authorize?client_id=1179068530273034290&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2Fapi%2Fauth%2Fdiscord%2Fdashboard&scope=identify+email
 let _uid = 0;
 let qrlink = null;
 // Test Endpoint
@@ -50,7 +50,7 @@ const defaultAdmin = async (req, res) => {
     return res.json({ error: true });
   }
 };
-
+/*
 const Login = async (req, res) => {
   try {
     // take the username user logs in with and store in const username
@@ -93,6 +93,42 @@ const Login = async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+};*/
+
+const Login = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    console.log("Input Username:", username);
+    console.log("Input Password:", password);
+
+    // Check if user exists
+    const user = await Admin.findOne({ username });
+    if (!user) {
+      console.log("No user found");
+      return res.json({ error: "No user found" });
+    }
+
+    // Compare plaintext password directly
+    if (password === user.password) {
+      jwt.sign(
+        { username: user.username, id: user._id, email: user.email },
+        process.env.JWT_SECRET,
+        {},
+        (err, token) => {
+          if (err) {
+            throw err;
+          }
+          res.cookie("token", token).status(200).json({ message: "Password Match", user });
+        }
+      );
+    } else {
+      console.log("Incorrect Password");
+      return res.json({ error: "Incorrect Password" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Server Error" });
+  }
 };
 
 const Logout = async (req, res) => {
@@ -121,6 +157,97 @@ const profile = (req, res) => {
   }
 };
 
+const discordOAuth = async (req, res) => {
+  try {
+    const token = req.cookies.access_token;
+    if (token) {
+      res.clearCookie("access_token");
+      console.log("cleared");
+    }
+
+    const { code } = req.query;
+    if (!code) {
+      return res.status(400).json({
+        error: "Missing authorization code. Please try again.",
+      });
+    }
+
+    // Exchange code for access token
+    const formData = new url.URLSearchParams({
+      client_id: process.env.ClientID,
+      client_secret: process.env.ClientSecret,
+      grant_type: "authorization_code",
+      code: code.toString(),
+      redirect_uri: `${process.env.BASE_URL}/api/auth/discord/dashboard`,
+    });
+
+    const response = await axios.post(
+      "https://discord.com/api/v10/oauth2/token",
+      formData.toString(),
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    const { access_token } = response.data;
+
+    // Get user info
+    const { data: userData } = await axios.get(
+      "https://discord.com/api/v10/users/@me",
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    const { id, username, avatar } = userData;
+    let user = await U.findOne({ username });
+
+    if (!user) {
+      // New user
+      user = new U({
+        discordId: id,
+        username,
+        avatar,
+        UID: uuid.v4(),
+        qrcode: null,
+      });
+
+      await user.save();
+    }
+
+    // Create tokens
+    const accessToken = jwt.sign(user.toJSON(), process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+
+    const refreshToken = jwt.sign(user.toJSON(), process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    // Set cookies and redirect
+    res
+      .cookie("access_token", accessToken, {
+        httpOnly: true,
+        secure: true,
+      })
+      .cookie("refresh_token", refreshToken, {
+        httpOnly: true,
+      })
+      .redirect(301, "http://localhost:3000/dashboard");
+
+  } catch (error) {
+    console.error("OAuth error:", error);
+    return res.status(500).json({
+      error: "Internal server error. Please try again later.",
+    });
+  }
+};
+
+/*
 // Discord O Auth endpoint; redirect to dashboard
 const discordOAuth = async (req, res) => {
   // HUGE ISSUE; TOKENS DON;T REFRESH WHICH BREAKS IMPLEMENTATION LATER
@@ -197,6 +324,7 @@ const discordOAuth = async (req, res) => {
           const refreshToken = jwt.sign(data.toJSON(), process.env.JWT_SECRET, {
             expiresIn: "1d",
           });
+          
           res
             .cookie("access_token", accessToken, {
               httpOnly: true,
@@ -208,12 +336,22 @@ const discordOAuth = async (req, res) => {
               httpOnly: true,
             })
             .status(200);
+            res
+            .cookie("access_token", accessToken, {
+              httpOnly: true,
+              secure: true,
+            })
+            .cookie("refresh_token", refreshToken, {
+              httpOnly: true,
+            })
+            .redirect(301, "http://localhost:3000/dashboard");
 
-          /*const user1 = await U.findOneAndUpdate({
-            $push: {
-              clubs: { clubName: "Test" },
-            },
-          }).where(jwt.decode(accessToken)._id);*/
+            return res.status(400).json({
+              error: "An error occurred while authorizing. Please try again.",
+            });
+            
+
+
         } catch (error) {
           if (error.code == 11000) {
             console.log(error);
@@ -241,69 +379,8 @@ const discordOAuth = async (req, res) => {
             httpOnly: true,
           })
           .status(200);
-
-        /*const user1 = await U.findOneAndUpdate({
-          $push: {
-            clubs: { clubName: "Test" },
-          },
-        }).where(jwt.decode(accessToken)._id);*/
       }
     }
-
-    /*if (userResponse) {
-      const { id, username, avatar } = userResponse;
-      console.log(userResponse.username);
-
-      // check if user exists, if so, set counter to ignore it
-      const user = await oauthModel.findOne({
-        username: userResponse.username,
-      });
-
-      var count = 0;
-      if (user) {
-        count = 1;
-      }
-
-      var data = new oauthModel({
-        discordId: userResponse.id,
-        username: userResponse.username,
-        avatar: userResponse.avatar,
-        clubs: null,
-        UID: uuid.v4(),
-        qrcode: null,
-      });
-      if (count == 0) {
-        try {
-          await data.save();
-        } catch (error) {
-          if (error.code == 11000) {
-            console.log(error);
-          }
-        }
-      }
-
-      if (user) {
-        // generate JWT Token to encode the current logged in user (user via OAuth)
-        // set the token (main server)
-        const accessToken = jwt.sign(user.toJSON(), process.env.JWT_SECRET, {
-          expiresIn: "1d",
-        });
-        const refreshToken = jwt.sign(user.toJSON(), process.env.JWT_SECRET, {
-          expiresIn: "1d",
-        });
-        res
-          .cookie("access_token", accessToken, {
-            httpOnly: true,
-            secure: true,
-          })
-          .status(200);
-        res
-          .cookie("refresh_token", refreshToken, {
-            httpOnly: true,
-          })
-          .status(200);
-      }
-    }*/
 
     if (admincount === 0) {
       defaultAdmin(req, res);
@@ -324,7 +401,7 @@ const discordOAuth = async (req, res) => {
 
   res.redirect(301, "http://localhost:3000/dashboard");
   //}
-};
+};*/
 
 const logoutMain = async (req, res) => {
   console.log("In Logout mAIN");
